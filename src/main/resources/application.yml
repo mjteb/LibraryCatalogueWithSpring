@@ -1,0 +1,53 @@
+#spring:
+#  application:
+#    name: libraryCatalogue
+#  datasource:
+#    url: "jdbc:postgresql://localhost:5433/db"
+#    username: "user"
+#    password: "password"
+#
+#  jpa:
+#    properties:
+#      hibernate:
+#        ddl-auto: update
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#
+#  flyway:
+#    url: "jdbc:postgresql://localhost:5433/db"
+#    user: user
+#    password: password
+#    locations: "classpath:db/migration"
+#    enabled: true
+#    check-location: true
+#
+#server:
+#  port: 9997
+#  servlet:
+#    context-path: /home
+
+spring:
+  application:
+    name: LibraryCatalogue
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/db"
+    username: "user"
+    password: "password"
+
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: update
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    url: "jdbc:postgresql://localhost:5432/db"
+    user: user
+    password: password
+    locations: "classpath:db/migration"
+    enabled: true
+    check-location: true
+
+server:
+  port: 9996
+  servlet:
+    context-path: /home

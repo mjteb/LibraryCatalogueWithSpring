@@ -1,0 +1,35 @@
+## Use postgres/example user/password credentials
+#version: '3.3'
+#
+#services:
+#
+#  db:
+#    image: postgres
+#    restart: always
+#    container_name: db
+#    ports:
+#      - "5433:5433"
+#    environment:
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: db
+#    volumes:
+#      - /var/lib/librarCatalogueProject/data
+
+# Use postgres/example user/password credentials
+version: '3.3'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    container_name: db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    volumes:
+      - /var/lib/postgresqlProject/data
