@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -26,6 +25,9 @@ public class LibraryMemberEntity {
     @Column(name="last_name")
     private String lastName;
 
+    @Column(name="phone_number")
+    private String phoneNumber;
+
     @Id
     @Column(name="card_number")
     private String cardNumber;
@@ -39,8 +41,14 @@ public class LibraryMemberEntity {
     @Column(name="outstanding_late_fees")
     private double outstandingLateFees;
 
-    @OneToMany(mappedBy = "memberBorrowingDocument", cascade = CascadeType.ALL)
+    @Column(name="number_of_books_borrowed")
+    private int numberOfBooksBorrowed;
+
+    @Column(name="number_of_books_reserved")
+    private int numberOfBooksReserved;
+
+    @OneToMany(mappedBy = "idMember", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<CopiesOfBooksEntity> booksBorrowed = new ArrayList<>();
+    private List<BooksBorrowedEntity> booksBorrowedEntities = new ArrayList<>();
 
 }

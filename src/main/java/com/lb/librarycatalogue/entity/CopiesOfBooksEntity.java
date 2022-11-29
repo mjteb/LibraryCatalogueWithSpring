@@ -19,11 +19,11 @@ import java.util.Date;
 
 public class CopiesOfBooksEntity {
 
-    @ManyToOne()
     @JoinColumn(name = "isbn_of_title", referencedColumnName = "isbn")
-    private BooksEntity isbnOfTitle;
+    private String isbnOfTitle;
 
     @Id
+    @JoinColumn(referencedColumnName = "cardNumber")
     private String barcode;
 
     @Column(name="due_Date")
