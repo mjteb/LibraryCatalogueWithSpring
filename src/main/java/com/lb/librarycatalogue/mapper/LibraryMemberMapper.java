@@ -20,19 +20,5 @@ public interface LibraryMemberMapper {
     List<LibraryMemberDto> mapLibraryMemberEntityToDto(List<LibraryMemberEntity> libraryMemberEntity);
 
 
-    //    @AfterMapping
-//    default void pouet(@MappingTarget LibraryMemberEntity libraryMemberEntity, LibraryMemberDto libraryMemberDto) {
-//        if (Date.from(Instant.now()).after(Date.valueOf(libraryMemberEntity.getMembershipExpirationDate()))) {
-//            libraryMemberEntity.setCardNumber(null);
-//        }
-//    }
 
-
-//    @Mapping(source = "cell", target = "phoneNumber")
-//            qualifiedByName = "nomMethode")
-
-//    @Named("nomMethode")
-//    default String mapPhoneNumber(LibraryMemberDto libraryMemberDto) {
-//        return libraryMemberDto.getCell();
-//    }
 }

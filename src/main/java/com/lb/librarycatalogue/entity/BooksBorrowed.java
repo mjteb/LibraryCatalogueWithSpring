@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class BooksBorrowedEntity {
+public class BooksBorrowed {
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
@@ -31,5 +31,8 @@ public class BooksBorrowedEntity {
 
     @Column(name="due_date")
     private LocalDate dueDate;
+
+    @JoinColumn(name ="isbn_of_borrowed_book", referencedColumnName = "isbn")
+    private String isbnOfBorrowedBook;
 
 }

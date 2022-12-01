@@ -49,6 +49,14 @@ public class LibraryMemberEntity {
 
     @OneToMany(mappedBy = "idMember", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<BooksBorrowedEntity> booksBorrowedEntities = new ArrayList<>();
+    private List<BooksBorrowed> booksBorrowedEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idMember", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ReservedBooksEntity> booksReserved = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idMember", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ReservationsAvailableToBorrowEntity> reservationsAvailableToBorrow = new ArrayList<>();
 
 }

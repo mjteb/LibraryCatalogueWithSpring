@@ -1,62 +1,54 @@
 package com.lb.librarycatalogue.service;
 
-import com.lb.librarycatalogue.entity.BooksEntity;
-import com.lb.librarycatalogue.entity.CopiesOfBooksEntity;
-import com.lb.librarycatalogue.entity.LibraryMemberEntity;
-import com.lb.librarycatalogue.repository.BooksRepository;
-import com.lb.librarycatalogue.repository.LibraryLoanSystemRepository;
-import com.lb.librarycatalogue.repository.LibraryMemberRepository;
+import com.lb.librarycatalogue.entity.BooksBorrowed;
+import com.lb.librarycatalogue.repository.*;
+import com.lb.librarycatalogue.utils.BookReservationUtils;
 import com.lb.librarycatalogue.utils.LibraryLoanUtils;
+import com.lb.librarycatalogue.utils.LibraryMemberUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
+@Transactional
 @Service
 public class LibraryLoanSystemService {
 
     private final LibraryMemberRepository libraryMemberRepository;
     private final LibraryLoanSystemRepository libraryLoanSystemRepository;
     private final BooksRepository booksRepository;
+    private final BookReservationRepository bookReservationRepository;
+    private final ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository;
 
 
-    public LibraryLoanSystemService(LibraryMemberRepository libraryMemberRepository, LibraryLoanSystemRepository libraryLoanSystemRepository, BooksRepository booksRepository) {
+    public LibraryLoanSystemService(LibraryMemberRepository libraryMemberRepository, LibraryLoanSystemRepository libraryLoanSystemRepository, BooksRepository booksRepository, BookReservationService bookReservationService, BookReservationRepository bookReservationRepository, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository) {
         this.libraryMemberRepository = libraryMemberRepository;
         this.libraryLoanSystemRepository = libraryLoanSystemRepository;
         this.booksRepository = booksRepository;
-
+        this.bookReservationRepository = bookReservationRepository;
+        this.reservationsAvailableForPickUpRepository = reservationsAvailableForPickUpRepository;
     }
 
-    @Transactional
-    public void borrowBook(String cardNumber, String barcode) {
 
-        CopiesOfBooksEntity originalCopy = libraryLoanSystemRepository.findById(barcode).get();
-        CopiesOfBooksEntity updatedCopy = CopiesOfBooksEntity.builder()
-                .isbnOfTitle(originalCopy.getIsbnOfTitle())
-                .barcode(originalCopy.getBarcode())
-                .memberBorrowingDocument(cardNumber)
+    public void borrowBook(BooksBorrowed booksBorrowed) {
+        LibraryMemberUtils.verifyMemberCanBorrowBook(libraryMemberRepository, booksBorrowed);
+        BooksBorrowed copyBorrowed = BooksBorrowed.builder()
+                .idBook(booksBorrowed.getIdBook())
+                .idMember(booksBorrowed.getIdMember())
+                .isbnOfBorrowedBook(booksBorrowed.getIsbnOfBorrowedBook())
+                .dateBookBorrowed(LocalDate.now())
                 .dueDate(LocalDate.now().plusWeeks(3))
                 .build();
-        libraryLoanSystemRepository.save(updatedCopy);
-        String isbn = originalCopy.getIsbnOfTitle();
-        LibraryLoanUtils.updateBookRecord(booksRepository, isbn);
-        LibraryLoanUtils.updateMemberProfile(libraryMemberRepository, cardNumber, barcode);
+        libraryLoanSystemRepository.save(copyBorrowed);
+        LibraryLoanUtils.updateBookRecordAfterBorrowing(booksRepository, booksBorrowed);
+        LibraryMemberUtils.updateMemberProfileAfterBorrowing(libraryMemberRepository, booksBorrowed);
     }
 
-//    @Transactional
-//    public void borrowBook(String cardNumber, CopiesOfBooksEntity copiesOfBooksEntity) {
-//        CopiesOfBooksEntity updatedCopy = CopiesOfBooksEntity.builder()
-//                .isbnOfTitle(copiesOfBooksEntity.getIsbnOfTitle())
-//                .barcode(copiesOfBooksEntity.getBarcode())
-//                .memberBorrowingDocument(cardNumber)
-//                .dueDate(LocalDate.now().plusWeeks(3))
-//                .build();
-//        libraryLoanSystemRepository.save(updatedCopy);
-//        updateBookRecord(copiesOfBooksEntity);
-//        updateMemberProfile(cardNumber);
-//    }
-
-
-
+    public void returnBook(BooksBorrowed booksBorrowed) {
+        LibraryLoanUtils.updateBookRecordAfterReturning(booksRepository, booksBorrowed);
+        LibraryMemberUtils.updateMemberProfileAfterReturning(libraryMemberRepository, booksBorrowed);
+        BookReservationUtils.checkIfBookReserved(booksRepository, booksBorrowed, bookReservationRepository, reservationsAvailableForPickUpRepository);
+        libraryLoanSystemRepository.deleteById(booksBorrowed.getId());
+    }
 }
 

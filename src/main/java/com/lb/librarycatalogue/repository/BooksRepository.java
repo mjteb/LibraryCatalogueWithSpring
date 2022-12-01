@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface BooksRepository extends JpaRepository <BooksEntity, String> {
     @Query
@@ -29,4 +30,10 @@ public interface BooksRepository extends JpaRepository <BooksEntity, String> {
                     "from books " +
                     "where author ilike :author", nativeQuery = true)
     List<BooksEntity> getBookAuthor(@Param(value ="author") String author);
+
+    @Query
+            (value = "select isbn " +
+                    "from books " +
+                    "where barcode = :barcode", nativeQuery = true)
+    String findByBarcode(@Param(value ="barcode") String barcode);
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Service
 public class BooksService {
 
-    BooksRepository booksRepository;
+    private final BooksRepository booksRepository;
 
 
     BooksService(BooksRepository booksRepository) {
@@ -30,6 +30,8 @@ public class BooksService {
                 copy.setIsbnOfTitle(booksEntity.getIsbn());
                 copy.setBarcode(UUID.randomUUID().toString());
             });
+            booksEntity.setNumberOfCopiesAvailable(booksEntity.getCopiesOfBooks().size());
+            booksEntity.setTotalNumberOfCopies(booksEntity.getCopiesOfBooks().size());
          booksRepository.save(booksEntity);
         }
     }
@@ -58,6 +60,8 @@ public class BooksService {
         Optional.of(booksRepository.findById(booksEntity.getIsbn())).orElseThrow(() -> {
             throw new RuntimeException("Book is not in system");
         });
+        booksEntity.setNumberOfCopiesAvailable(booksEntity.getCopiesOfBooks().size());
+        booksEntity.setTotalNumberOfCopies(booksEntity.getCopiesOfBooks().size());
         booksRepository.save(booksEntity);
     }
 

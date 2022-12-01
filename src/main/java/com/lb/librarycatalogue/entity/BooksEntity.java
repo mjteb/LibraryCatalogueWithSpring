@@ -29,10 +29,16 @@ public class BooksEntity {
     @Column(name="number_of_copies_available")
     private int numberOfCopiesAvailable;
 
+    @Column(name="number_of_reservations")
+    private int numberOfReservations;
 
     @OneToMany(mappedBy = "isbnOfTitle", cascade = CascadeType.ALL)
     @Builder.Default
     private List<CopiesOfBooksEntity> copiesOfBooks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "isbnOfReservedBook", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ReservedBooksEntity> reservations = new ArrayList<>();
 
 
 }

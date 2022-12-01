@@ -5,6 +5,7 @@ CREATE TABLE books
     isbn VARCHAR NOT NULL,
     total_number_of_copies INTEGER,
     number_of_copies_available INTEGER,
+    number_of_reservations INTEGER,
     PRIMARY KEY (isbn)
 );
 

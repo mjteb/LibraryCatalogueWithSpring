@@ -1,6 +1,6 @@
 package com.lb.librarycatalogue.mapper.pojos;
 
-import com.lb.librarycatalogue.entity.BooksBorrowedEntity;
+import com.lb.librarycatalogue.entity.BooksBorrowed;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,5 +17,5 @@ public class LibraryMemberDto {
     private LocalDate dateOfBirth;
     private LocalDate membershipExpirationDate;
     private double outstandingLateFees;
-    private List<BooksBorrowedEntity> booksBorrowedEntities = new ArrayList<>();
+    private List<BooksBorrowed> booksBorrowedEntities = new ArrayList<>();
 }
