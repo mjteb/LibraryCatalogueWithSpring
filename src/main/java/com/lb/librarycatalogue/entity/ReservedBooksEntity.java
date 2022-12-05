@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 
 public class ReservedBooksEntity {
-    @Id
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
 
     @Column(name="title_of_reserved_book")

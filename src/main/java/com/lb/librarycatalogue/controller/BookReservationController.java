@@ -20,17 +20,18 @@ private final ReservedBooksMapper reservedBooksMapper;
         this.reservedBooksMapper = reservedBooksMapper;
     }
 
+    @DeleteMapping(value = "/reservebook")
+    public ResponseEntity<Void> deleteReservation (@RequestParam int id) {
+        bookReservationService.deleteReservation(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @PostMapping(value = "/reservebook")
-    ResponseEntity<Void> reserveBook (@RequestBody ReservedBooksDto reservedBooksDto) {
+    public ResponseEntity<Void> reserveBook (@RequestBody ReservedBooksDto reservedBooksDto) {
         bookReservationService.reserveBook(reservedBooksMapper.mapReservedBooksDtoToEntity(reservedBooksDto));
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/deletereservation")
-    ResponseEntity<Void> deleteReservation (@RequestBody ReservedBooksDto reservedBooksDto) {
-        bookReservationService.deleteReservation(reservedBooksMapper.mapReservedBooksDtoToEntity(reservedBooksDto));
-        return ResponseEntity.noContent().build();
-    }
+
 
 }

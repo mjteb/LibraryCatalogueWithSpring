@@ -1,7 +1,10 @@
 package com.lb.librarycatalogue.utils;
 
 import com.lb.librarycatalogue.entity.BooksBorrowed;
+import com.lb.librarycatalogue.entity.BooksEntity;
 import com.lb.librarycatalogue.entity.LibraryMemberEntity;
+import com.lb.librarycatalogue.entity.ReservedBooksEntity;
+import com.lb.librarycatalogue.repository.BooksRepository;
 import com.lb.librarycatalogue.repository.LibraryMemberRepository;
 
 import java.time.LocalDate;
@@ -9,7 +12,8 @@ import java.time.LocalDate;
 public final class LibraryMemberUtils {
 
 private static final double AMOUNT_OF_FEES_THAT_BLOCK_ACCOUNT = 5.00;
-private static final int MAX_NUMBER_OF_BORROWED_BOOKS = 15;
+private static final int MAX_NUMBER_OF_BORROWED_BOOKS = 20;
+private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
 
     public static void verifyMemberCanBorrowBook (LibraryMemberRepository libraryMemberRepository, BooksBorrowed booksBorrowed) {
         LibraryMemberEntity libraryMember = libraryMemberRepository.findById(booksBorrowed.getIdMember()).get();
@@ -46,5 +50,40 @@ private static final int MAX_NUMBER_OF_BORROWED_BOOKS = 15;
         LibraryMemberEntity libraryMember = libraryMemberRepository.findById(booksBorrowed.getIdMember()).get();
         int numberOfBooksBorrowed = libraryMember.getNumberOfBooksBorrowed() - 1;
         libraryMember.setNumberOfBooksBorrowed(numberOfBooksBorrowed);
+    }
+
+    public static void updateMemberProfileAfterReserving(LibraryMemberRepository libraryMemberRepository, ReservedBooksEntity reservedBooksEntity) {
+        LibraryMemberEntity libraryMember = libraryMemberRepository.findById(reservedBooksEntity.getIdMember()).get();
+        int numberOfBooksReserved = libraryMember.getNumberOfBooksReserved();
+        libraryMember.setNumberOfBooksReserved(numberOfBooksReserved + 1);
+    }
+
+    public static void updateMemberProfileAfterDeletingReserving(LibraryMemberRepository libraryMemberRepository, String cardNumber) {
+        LibraryMemberEntity libraryMember = libraryMemberRepository.findById(cardNumber).get();
+        int numberOfBooksReserved = libraryMember.getNumberOfBooksReserved();
+        libraryMember.setNumberOfBooksReserved(numberOfBooksReserved - 1);
+    }
+
+    public static void checkIfMemberCanReserve(ReservedBooksEntity reservedBooksEntity, LibraryMemberRepository libraryMemberRepository, BooksRepository booksRepository) {
+        String cardNumber = reservedBooksEntity.getIdMember();
+        LibraryMemberEntity libraryMember = libraryMemberRepository.findById(cardNumber).get();
+        checkMembershipExpiration(libraryMember);
+        checkIfMemberAlreadyReservedBook(libraryMember, reservedBooksEntity, booksRepository);
+        checkNumberOfReservations(libraryMember);
+    }
+
+    private static void checkIfMemberAlreadyReservedBook(LibraryMemberEntity libraryMember, ReservedBooksEntity reservedBooksEntity, BooksRepository booksRepository) {
+        BooksEntity bookRecord = booksRepository.findById(reservedBooksEntity.getIsbnOfReservedBook()).get();
+        boolean memberAlreadyReserved = bookRecord.getReservations().stream().anyMatch(reservation -> reservation.getIdMember().equals(libraryMember.getCardNumber()));
+        if (memberAlreadyReserved) {
+            throw new RuntimeException("Library member already reserved book");
+        }
+    }
+
+    private static void checkNumberOfReservations(LibraryMemberEntity libraryMember) {
+        int numberOfMembersReservations = libraryMember.getNumberOfBooksReserved();
+        if (numberOfMembersReservations > MAX_NUMBER_OF_RESERVATIONS_ALLOWED) {
+            throw new RuntimeException("Max number of reservations made");
+        }
     }
 }

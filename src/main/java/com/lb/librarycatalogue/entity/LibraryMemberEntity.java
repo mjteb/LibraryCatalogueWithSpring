@@ -51,7 +51,7 @@ public class LibraryMemberEntity {
     @Builder.Default
     private List<BooksBorrowed> booksBorrowedEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idMember", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "idMember", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
     private List<ReservedBooksEntity> booksReserved = new ArrayList<>();
 

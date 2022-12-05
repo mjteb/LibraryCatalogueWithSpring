@@ -2,7 +2,6 @@ package com.lb.librarycatalogue.service;
 
 import com.lb.librarycatalogue.entity.BooksBorrowed;
 import com.lb.librarycatalogue.repository.*;
-import com.lb.librarycatalogue.utils.BookReservationUtils;
 import com.lb.librarycatalogue.utils.LibraryLoanUtils;
 import com.lb.librarycatalogue.utils.LibraryMemberUtils;
 import org.springframework.stereotype.Service;
@@ -17,16 +16,16 @@ public class LibraryLoanSystemService {
     private final LibraryMemberRepository libraryMemberRepository;
     private final LibraryLoanSystemRepository libraryLoanSystemRepository;
     private final BooksRepository booksRepository;
-    private final BookReservationRepository bookReservationRepository;
     private final ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository;
+    private final BookReservationService bookReservationService;
 
 
-    public LibraryLoanSystemService(LibraryMemberRepository libraryMemberRepository, LibraryLoanSystemRepository libraryLoanSystemRepository, BooksRepository booksRepository, BookReservationService bookReservationService, BookReservationRepository bookReservationRepository, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository) {
+    public LibraryLoanSystemService(LibraryMemberRepository libraryMemberRepository, LibraryLoanSystemRepository libraryLoanSystemRepository, BooksRepository booksRepository, BookReservationService bookReservationService, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository) {
         this.libraryMemberRepository = libraryMemberRepository;
         this.libraryLoanSystemRepository = libraryLoanSystemRepository;
         this.booksRepository = booksRepository;
-        this.bookReservationRepository = bookReservationRepository;
         this.reservationsAvailableForPickUpRepository = reservationsAvailableForPickUpRepository;
+        this.bookReservationService = bookReservationService;
     }
 
 
@@ -47,8 +46,9 @@ public class LibraryLoanSystemService {
     public void returnBook(BooksBorrowed booksBorrowed) {
         LibraryLoanUtils.updateBookRecordAfterReturning(booksRepository, booksBorrowed);
         LibraryMemberUtils.updateMemberProfileAfterReturning(libraryMemberRepository, booksBorrowed);
-        BookReservationUtils.checkIfBookReserved(booksRepository, booksBorrowed, bookReservationRepository, reservationsAvailableForPickUpRepository);
+        bookReservationService.checkIfBookReserved(booksRepository, booksBorrowed, reservationsAvailableForPickUpRepository);
         libraryLoanSystemRepository.deleteById(booksBorrowed.getId());
+
     }
 }
 

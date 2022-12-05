@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 public class ReservationsAvailableToBorrowEntity {
-    @Id
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
 
     @Column(name="title_of_reserved_book")
