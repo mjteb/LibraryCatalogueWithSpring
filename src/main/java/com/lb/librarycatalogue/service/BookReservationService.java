@@ -93,7 +93,8 @@ public class BookReservationService {
                 .map(ReservedBooksEntity::getId)
                 .collect(Collectors.toList());
         int idToDelete = reservationToDelete.get(0);
-        bookReservationRepository.deleteById(idToDelete);
+        ReservedBooksEntity reservationTODelete = bookReservationRepository.findById(idToDelete).get();
+        bookReservationRepository.delete(reservationTODelete);
         bookReservationRepository.flush();
     }
 
