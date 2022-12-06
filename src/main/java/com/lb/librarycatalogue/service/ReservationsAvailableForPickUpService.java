@@ -43,8 +43,15 @@ public class ReservationsAvailableForPickUpService {
 
     public void updatesIfReservationNotPickedUp(ReservationsAvailableToBorrowEntity reservation) {
         BooksEntity bookToUpdate = booksRepository.findById(reservation.getIsbnOfReservedBook()).get();
+        String barcode = reservation.getBarcodeOfReservedBook();
         removeReservationFromBooksAvailableToPickUp(reservation);
-        checkIfBookReserved(bookToUpdate);
+
+        if (true) {
+            updatePositionInLineForReservation(bookToUpdate);
+            deleteReservation(id);
+            addBookToReservationsAvailableForPickUp(cardNumber, barcode, bookToUpdate);
+            updateNumberOfReservations(bookToUpdate);
+        }
 
     }
 
@@ -53,19 +60,6 @@ public class ReservationsAvailableForPickUpService {
         reservationsAvailableForPickUpRepository.flush();
     }
 
-    public void checkIfBookReserved(BooksEntity bookToUpdate) {
-        if (bookToUpdate.getReservations().size() > 0) {
-            bookReservationService.updateNumberOfReservations(bookToUpdate);
-            bookReservationService.updatePositionInLineForReservation(bookToUpdate);
-            //TODO: bookborrowed: stateless a component has to be
-//            bookReservationService.determineNextPersonBookReservedForAndCopyOfBook(bookToUpdate, booksBorrowed, reservationsAvailableForPickUpRepository);
-        }
-    }
-
-
-    public void updatesAfterRemovingReservationFromBooksAvailableToPickUp(int id) {
-
-    }
 
 
 }

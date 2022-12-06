@@ -22,7 +22,7 @@ private final ReservedBooksMapper reservedBooksMapper;
 
     @DeleteMapping(value = "/reservebook")
     public ResponseEntity<Void> deleteReservation (@RequestParam int id) {
-        bookReservationService.deleteReservation(id);
+        bookReservationService.stepForDeletingReservation(id);
         return ResponseEntity.noContent().build();
     }
 

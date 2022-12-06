@@ -4,6 +4,7 @@ import com.lb.librarycatalogue.entity.BooksBorrowed;
 import com.lb.librarycatalogue.entity.BooksEntity;
 import com.lb.librarycatalogue.entity.LibraryMemberEntity;
 import com.lb.librarycatalogue.entity.ReservedBooksEntity;
+import com.lb.librarycatalogue.repository.BookReservationRepository;
 import com.lb.librarycatalogue.repository.BooksRepository;
 import com.lb.librarycatalogue.repository.LibraryMemberRepository;
 
@@ -52,16 +53,14 @@ private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
         libraryMember.setNumberOfBooksBorrowed(numberOfBooksBorrowed);
     }
 
-    public static void updateMemberProfileAfterReserving(LibraryMemberRepository libraryMemberRepository, ReservedBooksEntity reservedBooksEntity) {
-        LibraryMemberEntity libraryMember = libraryMemberRepository.findById(reservedBooksEntity.getIdMember()).get();
-        int numberOfBooksReserved = libraryMember.getNumberOfBooksReserved();
-        libraryMember.setNumberOfBooksReserved(numberOfBooksReserved + 1);
-    }
 
-    public static void updateMemberProfileAfterDeletingReserving(LibraryMemberRepository libraryMemberRepository, String cardNumber) {
+
+    public static void updateMemberNumberOfReservations(LibraryMemberRepository libraryMemberRepository, BookReservationRepository bookReservationRepository, String cardNumber) {
         LibraryMemberEntity libraryMember = libraryMemberRepository.findById(cardNumber).get();
-        int numberOfBooksReserved = libraryMember.getNumberOfBooksReserved();
-        libraryMember.setNumberOfBooksReserved(numberOfBooksReserved - 1);
+        long numberOfReservations = bookReservationRepository.findAll()
+                .stream()
+                .filter(reservation -> reservation.getIdMember().equals(libraryMember.getCardNumber())).count();
+        libraryMember.setNumberOfBooksReserved((int)numberOfReservations);
     }
 
     public static void checkIfMemberCanReserve(ReservedBooksEntity reservedBooksEntity, LibraryMemberRepository libraryMemberRepository, BooksRepository booksRepository) {
