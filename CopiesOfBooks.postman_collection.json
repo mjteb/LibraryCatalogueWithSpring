@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "6e59135e-f5f2-424e-b9ad-b8863a246283",
+		"name": "CopiesOfBooks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23946887"
+	},
+	"item": [
+		{
+			"name": "borrow book",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"idMember\" : \"CLARJER19900401\",\r\n    \"idBook\" : \"0e9047b9-da9d-4066-bce5-0d27fe3f301c\",\r\n    \"isbnOfBorrowedBook\" : \" 9780307592835\"\r\n    \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9996/home/bookmanagementsystemforbooks/borrowbook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9996",
+					"path": [
+						"home",
+						"bookmanagementsystemforbooks",
+						"borrowbook"
+					],
+					"query": [
+						{
+							"key": "cardNumber",
+							"value": "SMITDAN20000301",
+							"disabled": true
+						},
+						{
+							"key": "barcode",
+							"value": "63151a40-71bb-4d20-b78f-c27932bd831d",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "return book",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"id\" : 4,\r\n    \"idMember\" : \"CLARJER19900401\",\r\n    \"idBook\" : \"0e9047b9-da9d-4066-bce5-0d27fe3f301c\",\r\n    \"isbnOfBorrowedBook\" : \" 9780307592835\"\r\n    \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9996/home/bookmanagementsystemforbooks/returnbook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9996",
+					"path": [
+						"home",
+						"bookmanagementsystemforbooks",
+						"returnbook"
+					],
+					"query": [
+						{
+							"key": "cardNumber",
+							"value": "SMITDAN20000301",
+							"disabled": true
+						},
+						{
+							"key": "barcode",
+							"value": "63151a40-71bb-4d20-b78f-c27932bd831d",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
