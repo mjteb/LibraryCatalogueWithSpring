@@ -62,22 +62,10 @@ public class LibraryMemberController {
 
     }
 
-//    @GetMapping(value = "/recipe")
-//    public ResponseEntity<List<PersonalRecipesEntity>> getRecipes(
-//            @RequestParam(name = "typeOfRecipe", required = false) String typePersonalRecipesEntityFilter,
-//            @RequestParam(name = "nameOfRecipe", required = false) String personalRecipeNameFilter,
-//            @RequestParam(name = "ingredientFilter", required = false) List<String> ingredientFilter
-//    ) {
-//        return ResponseEntity.ok(personalRecipeManagementService.getPersonalRecipes(typePersonalRecipesEntityFilter, personalRecipeNameFilter, ingredientFilter));
-//    }
 
-//    @DeleteMapping(value = "/personalrecipe")
-//    public ResponseEntity<Void> deletePersonalRecipe(@RequestParam String name) {
-//        personalRecipeManagementService.deletePersonalRecipe(name);
-//        return ResponseEntity.noContent().build();
-//    }
-//    public ResponseEntity<Void> addPersonalRecipe(@RequestBody PersonalRecipesEntity personalRecipesEntity) {
-//        personalRecipeManagementService.addNewPersonalRecipe(personalRecipesEntity);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PutMapping(value = "/paylibraryfees")
+    public ResponseEntity<Void> payLibraryFines (@RequestParam String cardNumber, @RequestParam double amountPaid) {
+        libraryMemberService.payLibraryFines(cardNumber, amountPaid);
+        return ResponseEntity.noContent().build();
+    }
 }

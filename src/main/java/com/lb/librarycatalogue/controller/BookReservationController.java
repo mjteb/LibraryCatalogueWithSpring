@@ -3,8 +3,10 @@ package com.lb.librarycatalogue.controller;
 import com.lb.librarycatalogue.mapper.ReservedBooksMapper;
 import com.lb.librarycatalogue.mapper.pojos.ReservedBooksDto;
 import com.lb.librarycatalogue.service.BookReservationService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping(value = "/bookreservationsystem")
@@ -28,10 +30,9 @@ private final ReservedBooksMapper reservedBooksMapper;
 
     @PostMapping(value = "/reservebook")
     public ResponseEntity<Void> reserveBook (@RequestBody ReservedBooksDto reservedBooksDto) {
-        bookReservationService.reserveBook(reservedBooksMapper.mapReservedBooksDtoToEntity(reservedBooksDto));
+        bookReservationService.verificationsForRequestToReserveBook(reservedBooksMapper.mapReservedBooksDtoToEntity(reservedBooksDto));
         return ResponseEntity.noContent().build();
     }
-
 
 
 }

@@ -3,6 +3,7 @@ CREATE TABLE books_borrowed
     id SERIAL,
     id_book VARCHAR NOT NULL,
     id_member VARCHAR NOT NULL,
+    title VARCHAR NOT NULL,
     isbn_of_borrowed_book VARCHAR NOT NULL,
     date_book_borrowed DATE NOT NULL,
     due_date DATE NOT NULL,

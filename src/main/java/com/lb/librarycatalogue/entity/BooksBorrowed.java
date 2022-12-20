@@ -32,6 +32,9 @@ public class BooksBorrowed {
     @Column(name="due_date")
     private LocalDate dueDate;
 
+    @Column(name="title")
+    private String title;
+
     @JoinColumn(name ="isbn_of_borrowed_book", referencedColumnName = "isbn")
     private String isbnOfBorrowedBook;
 

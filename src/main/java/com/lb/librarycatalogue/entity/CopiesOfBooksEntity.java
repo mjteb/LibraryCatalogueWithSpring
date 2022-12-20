@@ -29,6 +29,9 @@ public class CopiesOfBooksEntity {
     @Column(name="due_Date")
     private LocalDate dueDate;
 
-    @JoinColumn(name = "member_borrowing_document", referencedColumnName = "card_number")
-    private String memberBorrowingDocument;
+    @Column(name="title")
+    private String title;
+
+    @Column(name = "status")
+    private String status;
 }

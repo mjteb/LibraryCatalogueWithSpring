@@ -73,5 +73,13 @@ public class LibraryMemberService {
         LocalDate newExpirationDate = LocalDate.now().plusYears(2);
         libraryMemberRepository.renewMembership(cardNumber, newExpirationDate);
     }
+
+    public void payLibraryFines(String cardNumber, double amountPaid) {
+        LibraryMemberEntity member = libraryMemberRepository.findById(cardNumber).get();
+        if (amountPaid <= member.getTotalLibraryFees()) {
+            member.setLibraryFeesFromBooksReturned(member.getLibraryFeesFromBooksReturned() - amountPaid);
+            member.setTotalLibraryFees(member.getLibraryFeesFromBooksReturned() + member.getLibraryFeesFromBooksCurrentlyBorrowed());
+        }
+    }
 }
 

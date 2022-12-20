@@ -5,7 +5,9 @@ import com.lb.librarycatalogue.repository.BookReservationRepository;
 import com.lb.librarycatalogue.repository.BooksRepository;
 import com.lb.librarycatalogue.repository.LibraryMemberRepository;
 import com.lb.librarycatalogue.repository.ReservationsAvailableForPickUpRepository;
+import com.lb.librarycatalogue.utils.LibraryLoanUtils;
 import com.lb.librarycatalogue.utils.LibraryMemberUtils;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
 
 @Transactional
 @Service
@@ -22,18 +25,47 @@ public class BookReservationService {
     private final BooksRepository booksRepository;
     private final LibraryMemberRepository libraryMemberRepository;
     private final ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository;
+    private final CopiesOfBooksService copiesOfBooksService;
+    private final ReservationsAvailableForPickUpService reservationsAvailableForPickUpService;
 
-    BookReservationService(BookReservationRepository bookReservationRepository, BooksRepository booksRepository, LibraryMemberRepository libraryMemberRepository, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository) {
+
+    BookReservationService(BookReservationRepository bookReservationRepository, BooksRepository booksRepository, LibraryMemberRepository libraryMemberRepository, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository, CopiesOfBooksService copiesOfBooksService, ReservationsAvailableForPickUpService reservationsAvailableForPickUpService) {
         this.bookReservationRepository = bookReservationRepository;
         this.booksRepository = booksRepository;
         this.libraryMemberRepository = libraryMemberRepository;
         this.reservationsAvailableForPickUpRepository = reservationsAvailableForPickUpRepository;
+        this.copiesOfBooksService = copiesOfBooksService;
+        this.reservationsAvailableForPickUpService = reservationsAvailableForPickUpService;
     }
     
-    public void reserveBook(ReservedBooksEntity reservedBooksEntity) {
+    public void verificationsForRequestToReserveBook(ReservedBooksEntity reservedBooksEntity) {
         BooksEntity bookToUpdate = booksRepository.findById(reservedBooksEntity.getIsbnOfReservedBook()).get();
         String cardNumber = reservedBooksEntity.getIdMember();
         LibraryMemberUtils.checkIfMemberCanReserve(reservedBooksEntity, libraryMemberRepository, booksRepository);
+        checkIfCopyAvailable(bookToUpdate, cardNumber, reservedBooksEntity);
+    }
+
+    public void checkIfCopyAvailable(BooksEntity bookToUpdate, String cardNumber, ReservedBooksEntity reservedBooksEntity) {
+        if (bookToUpdate.getNumberOfCopiesAvailable() > 0) {
+            stepsToPutBookAsideThatIsAvailable( bookToUpdate, cardNumber, reservedBooksEntity);
+        }
+        else {
+            stepsToReserveBook(bookToUpdate, cardNumber, reservedBooksEntity);
+        }
+    }
+
+    public void stepsToPutBookAsideThatIsAvailable(BooksEntity bookToUpdate, String cardNumber, ReservedBooksEntity reservedBooksEntity){
+        List <String> barcodeOfAvailableCopies = bookToUpdate.getCopiesOfBooks().stream()
+                .filter(copy -> copy.getStatus().equals("AVAILABLE"))
+                .map(CopiesOfBooksEntity::getBarcode)
+                .collect(Collectors.toList());
+        String barcode = barcodeOfAvailableCopies.get(0);
+        addBookToReservationsAvailableForPickUp(cardNumber, barcode, bookToUpdate);
+        copiesOfBooksService.updateCopyAvailableForPickUp(barcode);
+        LibraryLoanUtils.updateBookRecordNumberOfCopiesAvailable(booksRepository, bookToUpdate);
+    }
+
+    public void stepsToReserveBook(BooksEntity bookToUpdate, String cardNumber, ReservedBooksEntity reservedBooksEntity) {
         reservedBooksEntity.setDateBookReserved(LocalDate.now());
         reservedBooksEntity.setTitleOfReservedBook(booksRepository.findById(reservedBooksEntity.getIsbnOfReservedBook()).get().getTitle());
         reservedBooksEntity.setPositionInLineForBook(bookToUpdate.getReservations().size() + 1);
@@ -49,6 +81,10 @@ public class BookReservationService {
         if (numberOfReservations >= 1) {
             stepsForReturningBookWithReservations(bookToUpdate, booksBorrowed);
         }
+        else {
+            copiesOfBooksService.changeCopyStatusToAvailableAndRemoveDueDate(booksBorrowed.getIdBook());
+            LibraryLoanUtils.updateBookRecordNumberOfCopiesAvailable(booksRepository, bookToUpdate);
+        }
     }
 
     public void stepsForReturningBookWithReservations(BooksEntity bookToUpdate, BooksBorrowed booksBorrowed) {
@@ -59,10 +95,12 @@ public class BookReservationService {
         int id = reservationToDelete.get(0).getId();
         String cardNumber = reservationToDelete.get(0).getIdMember();
         String barcode = booksBorrowed.getIdBook();
+
         updatePositionInLineForReservation(bookToUpdate);
         deleteReservation(id);
         addBookToReservationsAvailableForPickUp(cardNumber, barcode, bookToUpdate);
         updateNumberOfReservations(bookToUpdate);
+        copiesOfBooksService.updateCopyAvailableForPickUp(barcode);
     }
 
     public void stepForDeletingReservation(int id) {
@@ -115,6 +153,37 @@ public class BookReservationService {
     }
 
 
+   @Scheduled(cron = "0 0 6 * * *")
+    public void verifyIfReservationNotPickedUpOnTime() {
+        List<ReservationsAvailableToBorrowEntity> reservationsNotPickedUpOnTime = reservationsAvailableForPickUpService.getListsOfReservationPickedUp();
+
+        if (!reservationsNotPickedUpOnTime.isEmpty()) {
+            reservationsNotPickedUpOnTime.forEach(reservation -> updatesIfReservationNotPickedUp(reservationsAvailableForPickUpService, reservation));
+        }
+    }
+
+    public void updatesIfReservationNotPickedUp(ReservationsAvailableForPickUpService reservationsAvailableForPickUpService, ReservationsAvailableToBorrowEntity reservation) {
+        BooksEntity bookToUpdate = booksRepository.findById(reservation.getIsbnOfReservedBook()).get();
+        String cardNumber;
+        int id;
+        String barcode = reservation.getBarcodeOfReservedBook();
+        reservationsAvailableForPickUpService.removeReservationFromBooksAvailableToPickUp(reservation);
+
+        if (bookToUpdate.getNumberOfReservations() >= 1) {
+            cardNumber = bookToUpdate.getReservations().get(0).getIdMember();
+            id = bookToUpdate.getReservations().get(0).getId();
+            updatePositionInLineForReservation(bookToUpdate);
+            deleteReservation(id);
+            addBookToReservationsAvailableForPickUp(cardNumber, barcode, bookToUpdate);
+            updateNumberOfReservations(bookToUpdate);
+            copiesOfBooksService.updateCopyAvailableForPickUp(barcode);
+            LibraryMemberUtils.updateMemberNumberOfReservations(libraryMemberRepository, bookReservationRepository, cardNumber);
+        }
+        else {
+            copiesOfBooksService.changeCopyStatusToAvailableAndRemoveDueDate(barcode);
+            LibraryLoanUtils.updateBookRecordNumberOfCopiesAvailable(booksRepository, bookToUpdate);
+        }
+    }
 
 
 }

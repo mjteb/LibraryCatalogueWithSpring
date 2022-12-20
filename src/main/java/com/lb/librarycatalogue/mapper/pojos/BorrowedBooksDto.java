@@ -17,5 +17,6 @@ public class BorrowedBooksDto {
     private LocalDate dateBookBorrowed;
     private LocalDate dueDate;
     private String isbnOfBorrowedBook;
+    private String title;
 
 }

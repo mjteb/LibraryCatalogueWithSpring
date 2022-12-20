@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +22,11 @@ public class LibraryMemberDto {
     private String cardNumber;
     private LocalDate dateOfBirth;
     private LocalDate membershipExpirationDate;
-    private double outstandingLateFees;
+    private double libraryFeesFromBooksCurrentlyBorrowed;
+    private double libraryFeesFromBooksReturned;
+    private double totalLibraryFees;
+    private int numberOfBooksBorrowed;
+    private int numberOfBooksReserved;
     private List<BooksBorrowed> booksBorrowedEntities = new ArrayList<>();
     private List<ReservedBooksEntity> booksReserved = new ArrayList<>();
     private List<ReservationsAvailableToBorrowEntity> reservationsAvailableToBorrow = new ArrayList<>();

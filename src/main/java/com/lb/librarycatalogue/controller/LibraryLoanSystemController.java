@@ -37,8 +37,8 @@ public class LibraryLoanSystemController {
     }
 
     @DeleteMapping(value = "/returnbook")
-    ResponseEntity<Void> returnBook (@RequestBody BorrowedBooksDto borrowedBooksDto) {
-        libraryLoanSystemService.returnBook(borrowedBooksMapper.mapBorrowedBooksDtoToEntity(borrowedBooksDto));
+    ResponseEntity<Void> returnBook (@RequestParam int id) {
+        libraryLoanSystemService.returnBook(id);
         return ResponseEntity.noContent().build();
     }
 

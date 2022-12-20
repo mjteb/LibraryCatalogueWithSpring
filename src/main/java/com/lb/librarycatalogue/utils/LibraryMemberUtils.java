@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 public final class LibraryMemberUtils {
 
-private static final double AMOUNT_OF_FEES_THAT_BLOCK_ACCOUNT = 5.00;
+private static final double AMOUNT_OF_FEES_THAT_BLOCK_ACCOUNT = 15.00;
 private static final int MAX_NUMBER_OF_BORROWED_BOOKS = 20;
 private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
 
@@ -25,7 +25,7 @@ private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
 
 
     private static void checkUnpaidFees(LibraryMemberEntity libraryMember) {
-        if (libraryMember.getOutstandingLateFees() > AMOUNT_OF_FEES_THAT_BLOCK_ACCOUNT) {
+        if (libraryMember.getTotalLibraryFees() > AMOUNT_OF_FEES_THAT_BLOCK_ACCOUNT) {
             throw new RuntimeException("Library fees must be paid before borrowing");
         }
     }
@@ -42,14 +42,10 @@ private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
         }
     }
 
-    public static void updateMemberProfileAfterBorrowing(LibraryMemberRepository libraryMemberRepository, BooksBorrowed booksBorrowed) {
-        LibraryMemberEntity libraryMember = libraryMemberRepository.findById(booksBorrowed.getIdMember()).get();
-        libraryMember.setNumberOfBooksBorrowed(libraryMember.getNumberOfBooksBorrowed() + 1);
-    }
 
-    public static void updateMemberProfileAfterReturning(LibraryMemberRepository libraryMemberRepository, BooksBorrowed booksBorrowed) {
+    public static void updateNumberOfBooksBorrowed(LibraryMemberRepository libraryMemberRepository, BooksBorrowed booksBorrowed) {
         LibraryMemberEntity libraryMember = libraryMemberRepository.findById(booksBorrowed.getIdMember()).get();
-        int numberOfBooksBorrowed = libraryMember.getNumberOfBooksBorrowed() - 1;
+        int numberOfBooksBorrowed = libraryMember.getBooksBorrowedEntities().size();
         libraryMember.setNumberOfBooksBorrowed(numberOfBooksBorrowed);
     }
 

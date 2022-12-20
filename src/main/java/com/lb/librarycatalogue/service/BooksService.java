@@ -27,6 +27,7 @@ public class BooksService {
         }
         else {
             booksEntity.getCopiesOfBooks().stream().forEach(copy -> {
+                copy.setStatus("AVAILABLE");
                 copy.setIsbnOfTitle(booksEntity.getIsbn());
                 copy.setBarcode(UUID.randomUUID().toString());
             });

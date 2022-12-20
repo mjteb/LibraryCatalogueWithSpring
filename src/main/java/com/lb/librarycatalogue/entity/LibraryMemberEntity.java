@@ -38,14 +38,21 @@ public class LibraryMemberEntity {
     @Column(name="membership_expiration_date")
     private LocalDate membershipExpirationDate;
 
-    @Column(name="outstanding_late_fees")
-    private double outstandingLateFees;
+    @Column(name="library_fees_from_books_currently_borrowed")
+    private double libraryFeesFromBooksCurrentlyBorrowed;
+
+    @Column(name="library_fees_from_returned_books")
+    private double libraryFeesFromBooksReturned;
+
+    @Column(name="total_library_fees")
+    private double totalLibraryFees;
 
     @Column(name="number_of_books_borrowed")
     private int numberOfBooksBorrowed;
 
     @Column(name="number_of_books_reserved")
     private int numberOfBooksReserved;
+
 
     @OneToMany(mappedBy = "idMember", cascade = CascadeType.ALL)
     @Builder.Default
@@ -60,3 +67,4 @@ public class LibraryMemberEntity {
     private List<ReservationsAvailableToBorrowEntity> reservationsAvailableToBorrow = new ArrayList<>();
 
 }
+
