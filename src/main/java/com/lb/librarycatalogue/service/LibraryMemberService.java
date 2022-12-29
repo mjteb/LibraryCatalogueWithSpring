@@ -32,11 +32,14 @@ public class LibraryMemberService {
         libraryMemberRepository.save(libraryMember);
     }
 
+
     public void deleteLibraryMember(String cardNumber) {
-        Optional.of(libraryMemberRepository.findById(cardNumber)).orElseThrow(() -> {
+        LibraryMemberEntity libraryMember = libraryMemberRepository
+                .findById(cardNumber)
+                .orElseThrow(() -> {
             throw new RuntimeException("Member does not exist");
         });
-        libraryMemberRepository.deleteById(cardNumber);
+        libraryMemberRepository.delete(libraryMember);
     }
 
 
@@ -45,7 +48,7 @@ public class LibraryMemberService {
             return libraryMemberRepository.findById(cardNumber).get();
         }
         else {
-            throw new RuntimeException("Recipe already exits");
+            throw new RuntimeException("Member does not exist");
         }
 
     }
@@ -67,7 +70,7 @@ public class LibraryMemberService {
     }
 
     public void renewMembership(String cardNumber) {
-        Optional.of(libraryMemberRepository.findById(cardNumber)).orElseThrow(() -> {
+        libraryMemberRepository.findById(cardNumber).orElseThrow(() -> {
             throw new RuntimeException("Member does not exist");
         });
         LocalDate newExpirationDate = LocalDate.now().plusYears(2);
@@ -79,6 +82,10 @@ public class LibraryMemberService {
         if (amountPaid <= member.getTotalLibraryFees()) {
             member.setLibraryFeesFromBooksReturned(member.getLibraryFeesFromBooksReturned() - amountPaid);
             member.setTotalLibraryFees(member.getLibraryFeesFromBooksReturned() + member.getLibraryFeesFromBooksCurrentlyBorrowed());
+            libraryMemberRepository.save(member);
+        }
+        else {
+            throw new RuntimeException("Amount paid is greater than total library fees");
         }
     }
 }
