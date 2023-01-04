@@ -1,15 +1,11 @@
 package com.lb.librarycatalogue.service;
 
 import com.lb.librarycatalogue.entity.LibraryMemberEntity;
-import com.lb.librarycatalogue.entity.ReservedBooksEntity;
 import com.lb.librarycatalogue.repository.LibraryMemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -33,8 +29,6 @@ class LibraryMemberServiceTest {
     private LibraryMemberRepository libraryMemberRepository;
 
 
-
-
     @Test
     public void givenCreatedMember_whenAddLibraryMember_thenItWorksOrNotORThrowSomething() {
         // Arrange
@@ -48,8 +42,6 @@ class LibraryMemberServiceTest {
     }
 
 
-
-
     @Test
     public void givenCardNumber_whenDeleteLibraryMember_thenItWorks() {
         //Arrange
@@ -60,7 +52,7 @@ class LibraryMemberServiceTest {
         libraryMemberService.deleteLibraryMember("SMITKAY19500401");
 
         //Assert
-        verify(libraryMemberRepository,times(1)).delete(libraryMember);
+        verify(libraryMemberRepository, times(1)).delete(libraryMember);
     }
 
     @Test
@@ -119,7 +111,7 @@ class LibraryMemberServiceTest {
     }
 
     @Test
-    public void givenCardNumberAndAmountPaid_whenPayLibraryFines_ThenFindMemberAndUpdateFines () {
+    public void givenCardNumberAndAmountPaid_whenPayLibraryFines_ThenFindMemberAndUpdateFines() {
         // Arrange
         LibraryMemberEntity member = constructLibraryMemberEntity();
         member.setTotalLibraryFees(5.00);
@@ -131,7 +123,7 @@ class LibraryMemberServiceTest {
     }
 
     @Test
-    public void givenCardNumberAndAmountPaid_whenPayLibraryFines_ThenThrowErrorThatAmountPaidIsTooHigh () {
+    public void givenCardNumberAndAmountPaid_whenPayLibraryFines_ThenThrowErrorThatAmountPaidIsTooHigh() {
         // Arrange
         LibraryMemberEntity member = constructLibraryMemberEntity();
         member.setTotalLibraryFees(5.00);

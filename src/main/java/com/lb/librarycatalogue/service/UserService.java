@@ -1,6 +1,5 @@
 package com.lb.librarycatalogue.service;
 
-import com.lb.librarycatalogue.repository.BooksRepository;
 import com.lb.librarycatalogue.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-
-
 
 
     UserService(UserRepository userRepository) {

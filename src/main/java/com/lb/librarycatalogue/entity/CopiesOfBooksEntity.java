@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Builder
 @Entity
@@ -26,10 +25,10 @@ public class CopiesOfBooksEntity {
     @JoinColumn(referencedColumnName = "cardNumber")
     private String barcode;
 
-    @Column(name="due_Date")
+    @Column(name = "due_Date")
     private LocalDate dueDate;
 
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
     @Column(name = "status")

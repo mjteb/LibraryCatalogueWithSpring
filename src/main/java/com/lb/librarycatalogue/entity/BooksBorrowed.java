@@ -17,25 +17,26 @@ import java.time.LocalDate;
 
 public class BooksBorrowed {
 
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JoinColumn(name="id_member", referencedColumnName = "cardNumber")
+    @JoinColumn(name = "id_member", referencedColumnName = "cardNumber")
     private String idMember;
 
-    @JoinColumn(name="id_book", referencedColumnName = "barcode")
+    @JoinColumn(name = "id_book", referencedColumnName = "barcode")
     private String idBook;
 
-    @Column(name="date_book_borrowed")
+    @Column(name = "date_book_borrowed")
     private LocalDate dateBookBorrowed;
 
-    @Column(name="due_date")
+    @Column(name = "due_date")
     private LocalDate dueDate;
 
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
-    @JoinColumn(name ="isbn_of_borrowed_book", referencedColumnName = "isbn")
+    @JoinColumn(name = "isbn_of_borrowed_book", referencedColumnName = "isbn")
     private String isbnOfBorrowedBook;
 
 }

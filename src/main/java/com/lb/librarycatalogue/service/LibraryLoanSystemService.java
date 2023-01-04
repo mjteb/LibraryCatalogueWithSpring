@@ -35,10 +35,10 @@ public class LibraryLoanSystemService {
         this.booksBorrowedRepository = booksBorrowedRepository;
     }
 
-@Transactional
+    @Transactional
     public void borrowBook(BooksBorrowed booksBorrowed) {
         LibraryMemberUtils.verifyMemberCanBorrowBook(libraryMemberRepository, booksBorrowed);
-       copiesOfBooksService.verifyCopyIsAvailableForLoan(booksBorrowed, reservationsAvailableForPickUpRepository);
+        copiesOfBooksService.verifyCopyIsAvailableForLoan(booksBorrowed, reservationsAvailableForPickUpRepository);
         BooksBorrowed copyBorrowed = BooksBorrowed.builder()
                 .idBook(booksBorrowed.getIdBook())
                 .idMember(booksBorrowed.getIdMember())
@@ -56,7 +56,7 @@ public class LibraryLoanSystemService {
     }
 
 
-@Transactional
+    @Transactional
     public void returnBook(int id) {
         BooksBorrowed booksBorrowed = booksBorrowedRepository.findById(id).get();
         libraryFeesService.checkIfBooksReturnedLate(booksBorrowed);
@@ -67,7 +67,7 @@ public class LibraryLoanSystemService {
         libraryFeesService.calculateLateFeesForBooksCurrentlyBorrowed(booksBorrowed.getIdMember());
     }
 
-    public void deleteBookFromBorrowedBooks (BooksBorrowed booksBorrowed) {
+    public void deleteBookFromBorrowedBooks(BooksBorrowed booksBorrowed) {
         libraryLoanSystemRepository.delete(booksBorrowed);
         libraryLoanSystemRepository.flush();
     }

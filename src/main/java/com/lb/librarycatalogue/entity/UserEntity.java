@@ -26,6 +26,6 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
 
-    @Column(name="card_number")
+    @Column(name = "card_number")
     private String cardNumber;
 }

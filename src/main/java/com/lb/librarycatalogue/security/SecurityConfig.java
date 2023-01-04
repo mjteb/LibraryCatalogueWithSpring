@@ -21,6 +21,7 @@ public class SecurityConfig {
 
     private JwtAuthEntryPoint authEntryPoint;
     private CustomUserDetailsService userDetailsService;
+
     @Autowired
     public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
         this.userDetailsService = userDetailsService;
@@ -39,14 +40,14 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/libraryportal/auth/**").permitAll()
-                .antMatchers("/copiesOfBooks/**").hasAnyRole("employee","admin", "user")
-                .antMatchers("/libraryloansystem/**").hasAnyAuthority("employee","admin")
-                .antMatchers("/librarymembermanagement/**").hasAnyAuthority("employee","admin")
+                .antMatchers("/copiesOfBooks/**").hasAnyRole("employee", "admin", "user")
+                .antMatchers("/libraryloansystem/**").hasAnyAuthority("employee", "admin")
+                .antMatchers("/librarymembermanagement/**").hasAnyAuthority("employee", "admin")
                 .antMatchers("/librarymemberprofile/**").hasAuthority("user")
-                .antMatchers("/bookmanagementsystemforbooks/**").hasAnyAuthority("employee","admin")
-                .antMatchers(HttpMethod.GET, "/bookmanagementsystemforbooks/**").hasAnyAuthority("employee","admin", "user")
-                .antMatchers("/bookreservationsystem/**").hasAnyAuthority("employee","admin", "user")
-                .antMatchers("/reservationsavailableforpickup/**").hasAnyAuthority("employee","admin", "user")
+                .antMatchers("/bookmanagementsystemforbooks/**").hasAnyAuthority("employee", "admin")
+                .antMatchers(HttpMethod.GET, "/bookmanagementsystemforbooks/**").hasAnyAuthority("employee", "admin", "user")
+                .antMatchers("/bookreservationsystem/**").hasAnyAuthority("employee", "admin", "user")
+                .antMatchers("/reservationsavailableforpickup/**").hasAnyAuthority("employee", "admin", "user")
                 .antMatchers("/admin/auth/**").hasAuthority("admin")
                 .anyRequest().authenticated()
                 .and()
@@ -67,7 +68,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public  JWTAuthenticationFilter jwtAuthenticationFilter() {
+    public JWTAuthenticationFilter jwtAuthenticationFilter() {
         return new JWTAuthenticationFilter();
     }
 }

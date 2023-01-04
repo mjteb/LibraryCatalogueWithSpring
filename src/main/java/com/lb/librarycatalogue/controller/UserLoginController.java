@@ -18,7 +18,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,7 +50,7 @@ public class UserLoginController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getUsername(),
@@ -76,16 +75,16 @@ public class UserLoginController {
             return new ResponseEntity<>("You have entered an invalid date of birth", HttpStatus.BAD_REQUEST);
         }
 
-            UserEntity user = new UserEntity();
-            user.setUsername(registerDto.getUsername());
-            user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
-            user.setCardNumber(registerDto.getCardNumber());
-            Role roles = roleRepository.findByName("user").get();
-            user.setRoles(Collections.singletonList(roles));
+        UserEntity user = new UserEntity();
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
+        user.setCardNumber(registerDto.getCardNumber());
+        Role roles = roleRepository.findByName("user").get();
+        user.setRoles(Collections.singletonList(roles));
 
-            userRepository.save(user);
+        userRepository.save(user);
 
-            return new ResponseEntity<>("Account successfully created", HttpStatus.OK);
+        return new ResponseEntity<>("Account successfully created", HttpStatus.OK);
 
     }
 
@@ -94,9 +93,6 @@ public class UserLoginController {
         LibraryMemberEntity member = libraryMemberRepository.findById(cardNumber).get();
         return !member.getDateOfBirth().equals(dateOfBirth);
     }
-
-
-
 
 
 }

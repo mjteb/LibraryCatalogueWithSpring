@@ -5,8 +5,6 @@ import com.lb.librarycatalogue.repository.LibraryMemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LibraryMemberService {
@@ -37,8 +35,8 @@ public class LibraryMemberService {
         LibraryMemberEntity libraryMember = libraryMemberRepository
                 .findById(cardNumber)
                 .orElseThrow(() -> {
-            throw new RuntimeException("Member does not exist");
-        });
+                    throw new RuntimeException("Member does not exist");
+                });
         libraryMemberRepository.delete(libraryMember);
     }
 
@@ -46,8 +44,7 @@ public class LibraryMemberService {
     public LibraryMemberEntity getLibraryMember(String cardNumber) {
         if (libraryMemberRepository.existsById(cardNumber)) {
             return libraryMemberRepository.findById(cardNumber).get();
-        }
-        else {
+        } else {
             throw new RuntimeException("Member does not exist");
         }
 
@@ -83,8 +80,7 @@ public class LibraryMemberService {
             member.setLibraryFeesFromBooksReturned(member.getLibraryFeesFromBooksReturned() - amountPaid);
             member.setTotalLibraryFees(member.getLibraryFeesFromBooksReturned() + member.getLibraryFeesFromBooksCurrentlyBorrowed());
             libraryMemberRepository.save(member);
-        }
-        else {
+        } else {
             throw new RuntimeException("Amount paid is greater than total library fees");
         }
     }

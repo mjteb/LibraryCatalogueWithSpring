@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class LibraryLoanSystemController {
 
 
-
     private final CopiesOfBooksMapper copiesOfBooksMapper;
     private final BooksMapper booksMapper;
     private final LibraryMemberMapper libraryMemberMapper;
@@ -31,13 +30,13 @@ public class LibraryLoanSystemController {
 
 
     @PostMapping(value = "/borrowbook")
-    ResponseEntity<Void> borrowBook (@RequestBody BorrowedBooksDto borrowedBooksDto) {
+    ResponseEntity<Void> borrowBook(@RequestBody BorrowedBooksDto borrowedBooksDto) {
         libraryLoanSystemService.borrowBook(borrowedBooksMapper.mapBorrowedBooksDtoToEntity(borrowedBooksDto));
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/returnbook")
-    ResponseEntity<Void> returnBook (@RequestParam int id) {
+    ResponseEntity<Void> returnBook(@RequestParam int id) {
         libraryLoanSystemService.returnBook(id);
         return ResponseEntity.noContent().build();
     }

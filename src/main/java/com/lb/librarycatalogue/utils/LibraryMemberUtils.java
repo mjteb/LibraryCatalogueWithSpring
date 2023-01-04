@@ -12,11 +12,11 @@ import java.time.LocalDate;
 
 public final class LibraryMemberUtils {
 
-private static final double AMOUNT_OF_FEES_THAT_BLOCK_ACCOUNT = 15.00;
-private static final int MAX_NUMBER_OF_BORROWED_BOOKS = 20;
-private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
+    private static final double AMOUNT_OF_FEES_THAT_BLOCK_ACCOUNT = 15.00;
+    private static final int MAX_NUMBER_OF_BORROWED_BOOKS = 20;
+    private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
 
-    public static void verifyMemberCanBorrowBook (LibraryMemberRepository libraryMemberRepository, BooksBorrowed booksBorrowed) {
+    public static void verifyMemberCanBorrowBook(LibraryMemberRepository libraryMemberRepository, BooksBorrowed booksBorrowed) {
         LibraryMemberEntity libraryMember = libraryMemberRepository.findById(booksBorrowed.getIdMember()).get();
         checkUnpaidFees(libraryMember);
         checkMembershipExpiration(libraryMember);
@@ -50,13 +50,12 @@ private static final int MAX_NUMBER_OF_RESERVATIONS_ALLOWED = 15;
     }
 
 
-
     public static void updateMemberNumberOfReservations(LibraryMemberRepository libraryMemberRepository, BookReservationRepository bookReservationRepository, String cardNumber) {
         LibraryMemberEntity libraryMember = libraryMemberRepository.findById(cardNumber).get();
         long numberOfReservations = bookReservationRepository.findAll()
                 .stream()
                 .filter(reservation -> reservation.getIdMember().equals(libraryMember.getCardNumber())).count();
-        libraryMember.setNumberOfBooksReserved((int)numberOfReservations);
+        libraryMember.setNumberOfBooksReserved((int) numberOfReservations);
     }
 
     public static void checkIfMemberCanReserve(ReservedBooksEntity reservedBooksEntity, LibraryMemberRepository libraryMemberRepository, BooksRepository booksRepository) {

@@ -16,25 +16,26 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 public class ReservationsAvailableToBorrowEntity {
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="title_of_reserved_book")
+    @Column(name = "title_of_reserved_book")
     private String titleOfReservedBook;
 
-    @JoinColumn(name="id_member", referencedColumnName = "cardNumber")
+    @JoinColumn(name = "id_member", referencedColumnName = "cardNumber")
     private String idMember;
 
-    @JoinColumn(name="isbn_of_reserved_book", referencedColumnName = "isbn")
+    @JoinColumn(name = "isbn_of_reserved_book", referencedColumnName = "isbn")
     private String isbnOfReservedBook;
 
-    @Column(name="date_book_available_to_borrow")
+    @Column(name = "date_book_available_to_borrow")
     private LocalDate dateBookAvailableToBorrow;
 
-    @Column(name="deadline_date_to_borrow_book")
+    @Column(name = "deadline_date_to_borrow_book")
     private LocalDate deadlineDateToBorrowBook;
 
 
-    @JoinColumn(name="barcode_of_reserved_book", referencedColumnName = "barcode")
+    @JoinColumn(name = "barcode_of_reserved_book", referencedColumnName = "barcode")
     private String barcodeOfReservedBook;
 }

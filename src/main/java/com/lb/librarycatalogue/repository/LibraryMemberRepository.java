@@ -9,15 +9,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Repository
-public interface LibraryMemberRepository extends JpaRepository <LibraryMemberEntity, String> {
+public interface LibraryMemberRepository extends JpaRepository<LibraryMemberEntity, String> {
 
     @Modifying
     @Transactional
     @Query(value = "update library_member " +
             "set membership_expiration_date = :newExpirationDate " +
-            "where card_number ilike :cardNumber" , nativeQuery = true)
-    void renewMembership(@Param(value="cardNumber") String cardNumber, @Param(value="newExpirationDate")LocalDate newExpirationDate);
+            "where card_number ilike :cardNumber", nativeQuery = true)
+    void renewMembership(@Param(value = "cardNumber") String cardNumber, @Param(value = "newExpirationDate") LocalDate newExpirationDate);
 }

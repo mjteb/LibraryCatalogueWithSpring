@@ -1,11 +1,8 @@
 package com.lb.librarycatalogue.controller;
 
 import com.lb.librarycatalogue.mapper.BooksMapper;
-import com.lb.librarycatalogue.mapper.LibraryMemberMapper;
 import com.lb.librarycatalogue.mapper.pojos.BooksDto;
-import com.lb.librarycatalogue.mapper.pojos.LibraryMemberDto;
 import com.lb.librarycatalogue.service.BooksService;
-import com.lb.librarycatalogue.service.LibraryMemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +21,19 @@ public class BooksController {
     }
 
     @PostMapping(value = "/addbook")
-    public ResponseEntity<Void> addBook (@RequestBody BooksDto booksDto) {
+    public ResponseEntity<Void> addBook(@RequestBody BooksDto booksDto) {
         booksService.addBook(booksMapper.mapBooksDtoToEntity(booksDto));
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/deletebook")
-    ResponseEntity<Void> deleteBook (@RequestParam String isbn) {
+    ResponseEntity<Void> deleteBook(@RequestParam String isbn) {
         booksService.deleteBook(isbn);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/getbook")
-    ResponseEntity <List<BooksDto>> getBook(
+    ResponseEntity<List<BooksDto>> getBook(
             @RequestParam(required = false) String isbn,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String author
@@ -46,7 +43,7 @@ public class BooksController {
     }
 
     @PutMapping(value = "/modifybook")
-    ResponseEntity<Void> modifybook (@RequestBody BooksDto booksDto) {
+    ResponseEntity<Void> modifybook(@RequestBody BooksDto booksDto) {
         booksService.modifyBook(booksMapper.mapBooksDtoToEntity(booksDto));
         return ResponseEntity.noContent().build();
     }

@@ -3,12 +3,8 @@ package com.lb.librarycatalogue.mapper.pojos;
 import com.lb.librarycatalogue.entity.BooksBorrowed;
 import com.lb.librarycatalogue.entity.ReservationsAvailableToBorrowEntity;
 import com.lb.librarycatalogue.entity.ReservedBooksEntity;
-import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

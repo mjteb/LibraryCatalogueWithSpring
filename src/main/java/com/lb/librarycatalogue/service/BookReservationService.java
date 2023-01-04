@@ -37,7 +37,7 @@ public class BookReservationService {
         this.copiesOfBooksService = copiesOfBooksService;
         this.reservationsAvailableForPickUpService = reservationsAvailableForPickUpService;
     }
-    
+
     public void verificationsForRequestToReserveBook(ReservedBooksEntity reservedBooksEntity) {
         BooksEntity bookToUpdate = booksRepository.findById(reservedBooksEntity.getIsbnOfReservedBook()).get();
         String cardNumber = reservedBooksEntity.getIdMember();
@@ -47,15 +47,14 @@ public class BookReservationService {
 
     public void checkIfCopyAvailable(BooksEntity bookToUpdate, String cardNumber, ReservedBooksEntity reservedBooksEntity) {
         if (bookToUpdate.getNumberOfCopiesAvailable() > 0) {
-            stepsToPutBookAsideThatIsAvailable( bookToUpdate, cardNumber, reservedBooksEntity);
-        }
-        else {
+            stepsToPutBookAsideThatIsAvailable(bookToUpdate, cardNumber, reservedBooksEntity);
+        } else {
             stepsToReserveBook(bookToUpdate, cardNumber, reservedBooksEntity);
         }
     }
 
-    public void stepsToPutBookAsideThatIsAvailable(BooksEntity bookToUpdate, String cardNumber, ReservedBooksEntity reservedBooksEntity){
-        List <String> barcodeOfAvailableCopies = bookToUpdate.getCopiesOfBooks().stream()
+    public void stepsToPutBookAsideThatIsAvailable(BooksEntity bookToUpdate, String cardNumber, ReservedBooksEntity reservedBooksEntity) {
+        List<String> barcodeOfAvailableCopies = bookToUpdate.getCopiesOfBooks().stream()
                 .filter(copy -> copy.getStatus().equals("AVAILABLE"))
                 .map(CopiesOfBooksEntity::getBarcode)
                 .collect(Collectors.toList());
@@ -80,8 +79,7 @@ public class BookReservationService {
         int numberOfReservations = booksRepository.findById(booksBorrowed.getIsbnOfBorrowedBook()).get().getReservations().size();
         if (numberOfReservations >= 1) {
             stepsForReturningBookWithReservations(bookToUpdate, booksBorrowed);
-        }
-        else {
+        } else {
             copiesOfBooksService.changeCopyStatusToAvailableAndRemoveDueDate(booksBorrowed.getIdBook());
             LibraryLoanUtils.updateBookRecordNumberOfCopiesAvailable(booksRepository, bookToUpdate);
         }
@@ -153,7 +151,7 @@ public class BookReservationService {
     }
 
 
-   @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public void verifyIfReservationNotPickedUpOnTime() {
         List<ReservationsAvailableToBorrowEntity> reservationsNotPickedUpOnTime = reservationsAvailableForPickUpService.getListsOfReservationPickedUp();
 
@@ -178,8 +176,7 @@ public class BookReservationService {
             updateNumberOfReservations(bookToUpdate);
             copiesOfBooksService.updateCopyAvailableForPickUp(barcode);
             LibraryMemberUtils.updateMemberNumberOfReservations(libraryMemberRepository, bookReservationRepository, cardNumber);
-        }
-        else {
+        } else {
             copiesOfBooksService.changeCopyStatusToAvailableAndRemoveDueDate(barcode);
             LibraryLoanUtils.updateBookRecordNumberOfCopiesAvailable(booksRepository, bookToUpdate);
         }

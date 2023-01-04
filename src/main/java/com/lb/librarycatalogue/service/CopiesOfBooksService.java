@@ -7,7 +7,6 @@ import com.lb.librarycatalogue.repository.CopiesOfBooksRepository;
 import com.lb.librarycatalogue.repository.ReservationsAvailableForPickUpRepository;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.Copies;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +30,6 @@ public class CopiesOfBooksService {
         copyToUpdate.setDueDate(LocalDate.now().plusWeeks(3));
         copyToUpdate.setStatus("ON LOAN");
     }
-
 
 
     public void changeCopyStatusToAvailableAndRemoveDueDate(String barcode) {
@@ -64,7 +62,7 @@ public class CopiesOfBooksService {
 
     public void deleteCopy(String barcode) {
         CopiesOfBooksEntity copy = copiesOfBooksRepository.findById(barcode).orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
-            copiesOfBooksRepository.deleteById(barcode);
+        copiesOfBooksRepository.deleteById(barcode);
     }
 }
 

@@ -11,11 +11,13 @@ import java.util.List;
 //@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BorrowedBooksMapper {
 
-    BooksBorrowed mapBorrowedBooksDtoToEntity (BorrowedBooksDto borrowedBooksDto);
+    BooksBorrowed mapBorrowedBooksDtoToEntity(BorrowedBooksDto borrowedBooksDto);
+
     List<BooksBorrowed> mapBorrowedBooksDtoToEntity(List<BorrowedBooksDto> borrowedBooksDtos);
 
     @InheritInverseConfiguration
     BorrowedBooksDto mapBorrowedBooksEntityToDto(BooksBorrowed booksBorrowed);
+
     List<BorrowedBooksDto> mapBorrowedBooksEntityToDto(List<BooksBorrowed> booksBorrowed);
 
 }

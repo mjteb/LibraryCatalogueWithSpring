@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookReservationRepository extends JpaRepository<ReservedBooksEntity, Integer> {
-@Modifying
+    @Modifying
     @Query
             (value = "delete  " +
                     "from books_reserved " +

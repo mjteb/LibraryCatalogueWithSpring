@@ -2,10 +2,9 @@ package com.lb.librarycatalogue.mapper;
 
 import com.lb.librarycatalogue.entity.LibraryMemberEntity;
 import com.lb.librarycatalogue.mapper.pojos.LibraryMemberDto;
-import org.mapstruct.*;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -13,12 +12,13 @@ import java.util.List;
 public interface LibraryMemberMapper {
 
     LibraryMemberEntity mapLibraryMemberDtoToEntity(LibraryMemberDto libraryMemberDto);
+
     List<LibraryMemberEntity> mapLibraryMemberDtoToEntity(List<LibraryMemberDto> libraryMemberDto);
 
     @InheritInverseConfiguration
     LibraryMemberDto mapLibraryMemberEntityToDto(LibraryMemberEntity libraryMemberEntity);
-    List<LibraryMemberDto> mapLibraryMemberEntityToDto(List<LibraryMemberEntity> libraryMemberEntity);
 
+    List<LibraryMemberDto> mapLibraryMemberEntityToDto(List<LibraryMemberEntity> libraryMemberEntity);
 
 
 }

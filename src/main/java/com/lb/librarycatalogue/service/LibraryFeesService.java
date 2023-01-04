@@ -70,7 +70,7 @@ public class LibraryFeesService {
         member.setLibraryFeesFromBooksCurrentlyBorrowed(updatedLibraryFees);
     }
 
-    public  void checkIfBooksReturnedLate(BooksBorrowed booksBorrowed) {
+    public void checkIfBooksReturnedLate(BooksBorrowed booksBorrowed) {
         LibraryMemberEntity member = libraryMemberRepository.findById(booksBorrowed.getIdMember()).get();
         LocalDate dueDateOfBook = booksBorrowed.getDueDate();
         if (dueDateOfBook.isBefore(LocalDate.now())) {
@@ -78,7 +78,7 @@ public class LibraryFeesService {
         }
     }
 
-    public  void calculateLateFeesForBookBeingReturned(LocalDate dueDate, LibraryMemberEntity member) {
+    public void calculateLateFeesForBookBeingReturned(LocalDate dueDate, LibraryMemberEntity member) {
         long numberOfDaysLate = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
         double fines = (double) numberOfDaysLate * 0.25;
         double libraryFeesFromBooksReturned = member.getLibraryFeesFromBooksReturned();

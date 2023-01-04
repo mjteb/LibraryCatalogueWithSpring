@@ -23,13 +23,13 @@ public class BooksEntity {
     @Id
     private String isbn;
 
-    @Column(name="total_number_of_copies")
+    @Column(name = "total_number_of_copies")
     private int totalNumberOfCopies;
 
-    @Column(name="number_of_copies_available")
+    @Column(name = "number_of_copies_available")
     private int numberOfCopiesAvailable;
 
-    @Column(name="number_of_reservations")
+    @Column(name = "number_of_reservations")
     private int numberOfReservations;
 
     @OneToMany(mappedBy = "isbnOfTitle", cascade = CascadeType.ALL)
