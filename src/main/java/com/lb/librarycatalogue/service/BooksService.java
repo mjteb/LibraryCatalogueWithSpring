@@ -35,7 +35,8 @@ public class BooksService {
 
 
     public void deleteBook(String isbn) {
-        Optional.of(booksRepository.findById(isbn)).orElseThrow(() -> {
+        BooksEntity book = booksRepository.findById(isbn)
+                .orElseThrow(() -> {
             throw new RuntimeException("Book is not in system");
         });
         booksRepository.deleteById(isbn);
@@ -54,7 +55,7 @@ public class BooksService {
     }
 
     public void modifyBook(BooksEntity booksEntity) {
-        Optional.of(booksRepository.findById(booksEntity.getIsbn())).orElseThrow(() -> {
+        booksRepository.findById(booksEntity.getIsbn()).orElseThrow(() -> {
             throw new RuntimeException("Book is not in system");
         });
         booksEntity.setNumberOfCopiesAvailable(booksEntity.getCopiesOfBooks().size());

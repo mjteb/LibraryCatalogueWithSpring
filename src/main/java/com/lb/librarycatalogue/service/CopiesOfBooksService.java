@@ -16,24 +16,26 @@ import java.util.stream.Collectors;
 public class CopiesOfBooksService {
 
     private final CopiesOfBooksRepository copiesOfBooksRepository;
-    private final ReservationsAvailableForPickUpService reservationsAvailableForPickUpService;
 
 
-    CopiesOfBooksService(CopiesOfBooksRepository copiesOfBooksRepository, ReservationsAvailableForPickUpService reservationsAvailableForPickUpService) {
+
+    CopiesOfBooksService(CopiesOfBooksRepository copiesOfBooksRepository) {
         this.copiesOfBooksRepository = copiesOfBooksRepository;
-        this.reservationsAvailableForPickUpService = reservationsAvailableForPickUpService;
+
     }
 
 
     public void changeCopyStatusToOnLoanAndAddDueDate(String barcode) {
-        CopiesOfBooksEntity copyToUpdate = copiesOfBooksRepository.findById(barcode).get();
+        CopiesOfBooksEntity copyToUpdate = copiesOfBooksRepository.findById(barcode)
+                .orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
         copyToUpdate.setDueDate(LocalDate.now().plusWeeks(3));
         copyToUpdate.setStatus("ON LOAN");
     }
 
 
     public void changeCopyStatusToAvailableAndRemoveDueDate(String barcode) {
-        CopiesOfBooksEntity copyToUpdate = copiesOfBooksRepository.findById(barcode).get();
+        CopiesOfBooksEntity copyToUpdate = copiesOfBooksRepository.findById(barcode)
+                .orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
         copyToUpdate.setDueDate(null);
         copyToUpdate.setStatus("AVAILABLE");
     }
@@ -54,14 +56,14 @@ public class CopiesOfBooksService {
         if (!copyOfBook.getStatus().equals("AVAILABLE") && reservation.size() < 1) {
             throw new RuntimeException("Copy is unavailable to borrow. Please make a reservation");
         } else if (reservation.size() >= 1) {
-//            reservationsAvailableForPickUpService.removeReservationFromBooksAvailableToPickUp(reservation.get(0));
             reservationsAvailableForPickUpRepository.deleteById(reservation.get(0).getId());
         }
 
     }
 
     public void deleteCopy(String barcode) {
-        CopiesOfBooksEntity copy = copiesOfBooksRepository.findById(barcode).orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
+        CopiesOfBooksEntity copy = copiesOfBooksRepository.findById(barcode)
+                .orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
         copiesOfBooksRepository.deleteById(barcode);
     }
 }

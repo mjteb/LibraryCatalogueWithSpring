@@ -47,8 +47,7 @@ public class LibraryLoanSystemService {
                 .dateBookBorrowed(LocalDate.now())
                 .dueDate(LocalDate.now().plusWeeks(3))
                 .build();
-        libraryLoanSystemRepository.save(copyBorrowed);
-        libraryLoanSystemRepository.flush();
+        libraryLoanSystemRepository.saveAndFlush(copyBorrowed);
         BooksEntity bookToUpdate = booksRepository.findById(booksBorrowed.getIsbnOfBorrowedBook()).get();
         LibraryMemberUtils.updateNumberOfBooksBorrowed(libraryMemberRepository, booksBorrowed);
         copiesOfBooksService.changeCopyStatusToOnLoanAndAddDueDate(booksBorrowed.getIdBook());

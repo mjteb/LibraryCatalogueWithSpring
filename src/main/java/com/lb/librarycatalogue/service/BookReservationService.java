@@ -74,6 +74,7 @@ public class BookReservationService {
         updateNumberOfReservations(bookToUpdate);
     }
 
+
     public void checkIfBookReserved(BooksRepository booksRepository, BooksBorrowed booksBorrowed, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository) {
         BooksEntity bookToUpdate = booksRepository.findById(booksBorrowed.getIsbnOfBorrowedBook()).get();
         int numberOfReservations = booksRepository.findById(booksBorrowed.getIsbnOfBorrowedBook()).get().getReservations().size();

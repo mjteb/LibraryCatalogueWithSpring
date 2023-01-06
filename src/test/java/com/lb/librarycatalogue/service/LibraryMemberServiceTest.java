@@ -2,6 +2,7 @@ package com.lb.librarycatalogue.service;
 
 import com.lb.librarycatalogue.entity.LibraryMemberEntity;
 import com.lb.librarycatalogue.repository.LibraryMemberRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +31,7 @@ class LibraryMemberServiceTest {
 
 
     @Test
-    public void givenCreatedMember_whenAddLibraryMember_thenItWorksOrNotORThrowSomething() {
+    public void givenCreatedMember_whenAddLibraryMember_thenItWorks() {
         // Arrange
         LibraryMemberEntity member = constructLibraryMemberEntity();
 
@@ -72,11 +73,11 @@ class LibraryMemberServiceTest {
         given(libraryMemberRepository.findById(anyString())).willReturn(Optional.of(response));
 
         // Act
-        LibraryMemberEntity result = libraryMemberService.getLibraryMember("");
+        LibraryMemberEntity result = libraryMemberService.getLibraryMember("123");
 
         // Assert
         assertEquals(response.getCardNumber(), result.getCardNumber());
-
+        Assertions.assertThat(result).isNotNull();
 
     }
 
