@@ -57,7 +57,8 @@ public class LibraryLoanSystemService {
 
     @Transactional
     public void returnBook(int id) {
-        BooksBorrowed booksBorrowed = booksBorrowedRepository.findById(id).get();
+        BooksBorrowed booksBorrowed = booksBorrowedRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("An invalid id was entered"));;
         libraryFeesService.checkIfBooksReturnedLate(booksBorrowed);
         bookReservationService.checkIfBookReserved(booksRepository, booksBorrowed, reservationsAvailableForPickUpRepository);
         deleteBookFromBorrowedBooks(booksBorrowed);

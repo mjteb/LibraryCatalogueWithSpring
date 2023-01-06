@@ -64,7 +64,7 @@ public class CopiesOfBooksService {
     public void deleteCopy(String barcode) {
         CopiesOfBooksEntity copy = copiesOfBooksRepository.findById(barcode)
                 .orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
-        copiesOfBooksRepository.deleteById(barcode);
+        copiesOfBooksRepository.delete(copy);
     }
 }
 

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -50,8 +51,6 @@ class LibraryLoanSystemServiceTest {
     @Mock
     private  BooksBorrowedRepository booksBorrowedRepository;
 
-    @Mock
-    LibraryMemberUtils libraryMemberUtils;
 
 
 
@@ -60,8 +59,10 @@ class LibraryLoanSystemServiceTest {
         //Arrange
         BooksBorrowed bookBorrowed = constructBorrowedBook();
         BooksEntity book = constructBooksEntity();
-        given(LibraryMemberUtils.verifyMemberCanBorrowBook(libraryMemberRepository, bookBorrowed)).willCallRealMethod();
+        LibraryMemberEntity member = constructLibraryMemberEntity();
         given(booksRepository.findById(anyString())).willReturn(Optional.of(book));
+        given(libraryMemberRepository.findById(anyString())).willReturn(Optional.of(member));
+
 
         //Act
         libraryLoanSystemService.borrowBook(bookBorrowed);
@@ -71,15 +72,32 @@ class LibraryLoanSystemServiceTest {
         verify(booksRepository, times(1)).findById("9781984822178");
     }
 
+    @Test
+    public void givenBookBorrowedId_whenReturnBook_thenItWorks() {
+        //Arrange
+        BooksBorrowed bookBorrowed = constructBorrowedBook();
+        LibraryMemberEntity member = constructLibraryMemberEntity();
+        given(booksBorrowedRepository.findById(anyInt())).willReturn(Optional.of(bookBorrowed));
+        given(libraryMemberRepository.findById(anyString())).willReturn(Optional.of(member));
+
+
+        //Act
+        libraryLoanSystemService.returnBook(5);
+
+        //Assert
+        verify(booksBorrowedRepository, times(1)).findById(5);
+
+    }
+
     private BooksBorrowed constructBorrowedBook() {
         return BooksBorrowed.builder()
-                .id(1)
                 .idBook("af7ee5d2-d278-4e8d-bc05-c5481af3d837")
                 .idMember("SMITJON19500401")
                 .title("Normal People")
                 .isbnOfBorrowedBook("9781984822178")
-                .dateBookBorrowed(null)
-                .dueDate(null)
+                .dateBookBorrowed(LocalDate.now())
+                .dueDate(LocalDate.now().plusWeeks(3))
+
                 .build();
     }
 
@@ -95,6 +113,17 @@ class LibraryLoanSystemServiceTest {
                 .numberOfReservations(0)
                 .copiesOfBooks(copies)
                 .reservations(reservations)
+                .build();
+    }
+
+    private LibraryMemberEntity constructLibraryMemberEntity() {
+        return LibraryMemberEntity.builder()
+                .firstName("Kayla")
+                .lastName("Smith")
+                .dateOfBirth(LocalDate.of(2015, 12, 31))
+                .membershipExpirationDate(LocalDate.now().plusYears(2))
+                .phoneNumber("1231235454")
+                .cardNumber("SMITKAY19500401")
                 .build();
     }
 

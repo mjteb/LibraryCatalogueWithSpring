@@ -35,8 +35,7 @@ public class UserService {
     }
 
     public String getCardNumber(String userName) {
-        String cardNumber = null;
-        return cardNumber = userRepository.findByUsername(userName).get().getCardNumber();
+        return userRepository.findByUsername(userName).get().getCardNumber();
     }
 
 }
