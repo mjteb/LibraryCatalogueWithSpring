@@ -97,9 +97,10 @@ class LibraryLoanSystemServiceTest {
                 .isbnOfBorrowedBook("9781984822178")
                 .dateBookBorrowed(LocalDate.now())
                 .dueDate(LocalDate.now().plusWeeks(3))
-
                 .build();
     }
+
+
 
     private BooksEntity constructBooksEntity() {
         List<CopiesOfBooksEntity> copies = new ArrayList<>();
@@ -115,6 +116,7 @@ class LibraryLoanSystemServiceTest {
                 .reservations(reservations)
                 .build();
     }
+
 
     private LibraryMemberEntity constructLibraryMemberEntity() {
         return LibraryMemberEntity.builder()

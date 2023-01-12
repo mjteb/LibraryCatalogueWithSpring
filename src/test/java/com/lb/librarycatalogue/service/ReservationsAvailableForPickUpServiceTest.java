@@ -1,7 +1,6 @@
 package com.lb.librarycatalogue.service;
 
-import com.lb.librarycatalogue.entity.BooksBorrowed;
-import com.lb.librarycatalogue.entity.CopiesOfBooksEntity;
+
 import com.lb.librarycatalogue.entity.ReservationsAvailableToBorrowEntity;
 import com.lb.librarycatalogue.repository.ReservationsAvailableForPickUpRepository;
 import org.assertj.core.api.Assertions;
@@ -27,7 +26,7 @@ class ReservationsAvailableForPickUpServiceTest {
     private ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository;
 
     @Test
-    public void givenNothing_getListsOfReservationPickedUp_thenItWorks() {
+    public void givenNothing_whenGetListsOfReservationPickedUp_thenItWorks() {
         //Arrange
         List<ReservationsAvailableToBorrowEntity> reservation = List.of(constructReservationAvailableToBorrow());
         given(reservationsAvailableForPickUpRepository.findAll()).willReturn(reservation);
@@ -41,7 +40,7 @@ class ReservationsAvailableForPickUpServiceTest {
     }
 
     @Test
-    public void givenReservationAvailableToBorrowEntity_removeReservationFromBooksAvailableToPickUp_thenItWorks() {
+    public void givenReservationAvailableToBorrowEntity_whenRemoveReservationFromBooksAvailableToPickUp_thenItWorks() {
         //Arrange
         ReservationsAvailableToBorrowEntity reservation = constructReservationAvailableToBorrow();
 
