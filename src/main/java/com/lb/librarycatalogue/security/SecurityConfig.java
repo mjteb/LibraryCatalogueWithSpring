@@ -1,5 +1,6 @@
 package com.lb.librarycatalogue.security;
 
+import com.lb.librarycatalogue.entity.Role_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,16 +40,16 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/libraryportal/auth/**").permitAll()
-                .antMatchers("/copiesOfBooks/**").hasAnyRole("employee", "admin", "user")
-                .antMatchers("/libraryloansystem/**").hasAnyAuthority("employee", "admin")
-                .antMatchers("/librarymembermanagement/**").hasAnyAuthority("employee", "admin")
-                .antMatchers("/librarymemberprofile/**").hasAuthority("user")
-                .antMatchers("/bookmanagementsystemforbooks/**").hasAnyAuthority("employee", "admin")
-                .antMatchers(HttpMethod.GET, "/bookmanagementsystemforbooks/**").hasAnyAuthority("employee", "admin", "user")
-                .antMatchers("/bookreservationsystem/**").hasAnyAuthority("employee", "admin", "user")
-                .antMatchers("/reservationsavailableforpickup/**").hasAnyAuthority("employee", "admin", "user")
                 .antMatchers("/admin/auth/**").hasAuthority("admin")
+                .antMatchers("/librarymemberprofile/**").hasAuthority("user")
+                .antMatchers("/copiesOfBooks/**").hasAnyAuthority("admin", "employee")
+                .antMatchers("/libraryloansystem/**").hasAnyAuthority("admin", "employee")
+                .antMatchers("/librarymembermanagement/**").hasAnyAuthority("admin", "employee")
+                .antMatchers("/bookmanagementsystemforbooks/getbook").permitAll()
+                .antMatchers("/bookmanagementsystemforbooks/**").hasAnyAuthority("employee", "admin")
+                .antMatchers("/bookreservationsystem/**").authenticated()
+//                .antMatchers("/reservationsavailableforpickup/**").hasAnyRole()
+                .antMatchers("/libraryportal/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

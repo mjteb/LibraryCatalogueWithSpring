@@ -20,7 +20,6 @@ public class LibraryMemberProfileController {
     public LibraryMemberProfileController(LibraryMemberService libraryMemberService, LibraryMemberMapper libraryMemberMapper, UserService userService) {
         this.libraryMemberService = libraryMemberService;
         this.libraryMemberMapper = libraryMemberMapper;
-
         this.userService = userService;
     }
 

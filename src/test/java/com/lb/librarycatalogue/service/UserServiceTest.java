@@ -25,8 +25,22 @@ class UserServiceTest {
     @Mock
     UserRepository userRepository;
 
+
+//    @Test
+//    public void giveNothing_whenRetrieveUserInfo_ThenWorks() {
+//        //Arrange
+//        UserEntity user = constructUser();
+//        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(user));
+//
+//        //Act
+//        String username = userService.retrieveUserInfo();
+//
+//        //Assert
+//        assertEquals(user.getCardNumber(), cardNumber);
+//    }
+
     @Test
-    public void givenCardNumberBarcodeBook_whenAddBookToReservationsAvailableForPickUp_ThenWorks() {
+    public void givenUserName_whenGetCardNumber_ThenWorks() {
         //Arrange
         UserEntity user = constructUser();
         given(userRepository.findByUsername(anyString())).willReturn(Optional.of(user));

@@ -2,6 +2,7 @@ package com.lb.librarycatalogue.controller;
 
 import com.lb.librarycatalogue.service.CopiesOfBooksService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class CopiesOfBooksController {
     }
 
 
-    @PostMapping(value = "/deletecopy")
+    @DeleteMapping(value = "/deletecopy")
     ResponseEntity<Void> deleteCopy(String barcode) {
         copiesOfBooksService.deleteCopy(barcode);
         return ResponseEntity.noContent().build();

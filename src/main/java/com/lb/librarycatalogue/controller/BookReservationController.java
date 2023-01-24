@@ -20,7 +20,7 @@ public class BookReservationController {
         this.reservedBooksMapper = reservedBooksMapper;
     }
 
-    @DeleteMapping(value = "/reservebook")
+    @DeleteMapping(value = "/deletereservation")
     public ResponseEntity<Void> deleteReservation(@RequestParam int id) {
         bookReservationService.stepForDeletingReservation(id);
         return ResponseEntity.noContent().build();

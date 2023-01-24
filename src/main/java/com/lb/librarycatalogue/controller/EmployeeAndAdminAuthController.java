@@ -4,6 +4,7 @@ package com.lb.librarycatalogue.controller;
 import com.lb.librarycatalogue.entity.Role;
 import com.lb.librarycatalogue.entity.UserEntity;
 import com.lb.librarycatalogue.mapper.pojos.EmployeeRegisterDto;
+import com.lb.librarycatalogue.mapper.pojos.RegisterDto;
 import com.lb.librarycatalogue.repository.LibraryMemberRepository;
 import com.lb.librarycatalogue.repository.RoleRepository;
 import com.lb.librarycatalogue.repository.UserRepository;
@@ -44,18 +45,37 @@ public class EmployeeAndAdminAuthController {
 
 
     @PostMapping(value = "/registeremployee")
-    public ResponseEntity<String> createEmployeeAccount(@RequestBody EmployeeRegisterDto employeeRegisterDto) {
+    public ResponseEntity<String> createEmployeeAccount(@RequestBody RegisterDto registerDto) {
 
-        if (userRepository.existsByUsername(employeeRegisterDto.getUsername())) {
+        if (userRepository.existsByUsername(registerDto.getUsername())) {
             return new ResponseEntity<>("Username is taken", HttpStatus.BAD_REQUEST);
         }
 
         UserEntity user = new UserEntity();
-        user.setUsername(employeeRegisterDto.getUsername());
-        user.setPassword(passwordEncoder.encode((employeeRegisterDto.getPassword())));
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
         Role roles = roleRepository.findByName("employee").get();
         user.setRoles(Collections.singletonList(roles));
+        user.setCardNumber(registerDto.getCardNumber());
+        userRepository.save(user);
 
+        return new ResponseEntity<>("Account successfully created", HttpStatus.OK);
+
+    }
+
+    @PostMapping(value = "/registeradmin")
+    public ResponseEntity<String> createAdminAccount(@RequestBody RegisterDto registerDto) {
+
+        if (userRepository.existsByUsername(registerDto.getUsername())) {
+            return new ResponseEntity<>("Username is taken", HttpStatus.BAD_REQUEST);
+        }
+
+        UserEntity user = new UserEntity();
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
+        Role roles = roleRepository.findByName("admin").get();
+        user.setRoles(Collections.singletonList(roles));
+        user.setCardNumber(registerDto.getCardNumber());
         userRepository.save(user);
 
         return new ResponseEntity<>("Account successfully created", HttpStatus.OK);

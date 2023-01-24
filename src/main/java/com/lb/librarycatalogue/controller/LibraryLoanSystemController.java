@@ -14,16 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class LibraryLoanSystemController {
 
 
-    private final CopiesOfBooksMapper copiesOfBooksMapper;
-    private final BooksMapper booksMapper;
-    private final LibraryMemberMapper libraryMemberMapper;
     private final BorrowedBooksMapper borrowedBooksMapper;
     private final LibraryLoanSystemService libraryLoanSystemService;
 
-    public LibraryLoanSystemController(LibraryMemberMapper libraryMemberMapper, CopiesOfBooksMapper copiesOfBooksMapper, BooksMapper booksMapper, BorrowedBooksMapper borrowedBooksMapper, LibraryLoanSystemService libraryLoanSystemService) {
-        this.copiesOfBooksMapper = copiesOfBooksMapper;
-        this.libraryMemberMapper = libraryMemberMapper;
-        this.booksMapper = booksMapper;
+    public LibraryLoanSystemController(BorrowedBooksMapper borrowedBooksMapper, LibraryLoanSystemService libraryLoanSystemService) {
         this.borrowedBooksMapper = borrowedBooksMapper;
         this.libraryLoanSystemService = libraryLoanSystemService;
     }

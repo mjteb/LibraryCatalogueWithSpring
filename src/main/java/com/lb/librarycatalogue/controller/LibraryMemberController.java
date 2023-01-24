@@ -32,7 +32,6 @@ public class LibraryMemberController {
 
     @GetMapping(value = "/librarymember")
     public ResponseEntity<LibraryMemberDto> getLibraryMember(@RequestParam String cardNumber) {
-//        return ResponseEntity.ok(libraryMemberService.getLibraryMember(cardNumber));
         return ResponseEntity.ok(libraryMemberMapper.mapLibraryMemberEntityToDto(libraryMemberService.getLibraryMember(cardNumber)));
     }
 
@@ -45,14 +44,12 @@ public class LibraryMemberController {
     ) {
         libraryMemberService.modifyLibraryMember(cardNumber, firstName, lastName, phoneNumber);
         return ResponseEntity.noContent().build();
-
     }
 
     @PutMapping(value = "/librarymemberrenewal")
     public ResponseEntity<Void> renewMembership(@RequestParam String cardNumber) {
         libraryMemberService.renewMembership(cardNumber);
         return ResponseEntity.noContent().build();
-
     }
 
 

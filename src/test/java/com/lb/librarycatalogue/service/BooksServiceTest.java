@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -98,6 +100,23 @@ class BooksServiceTest {
         verify(booksRepository, times(1)).save(book);
     }
 
+    @Test
+    public void givenNothing_whenGetBook_thenReturnsAllBooks() {
+        //Arrange
+        List<CopiesOfBooksEntity> copies = new ArrayList<>();
+        List<ReservedBooksEntity> reservations = new ArrayList<>();
+        booksRepository.save(new BooksEntity("The Idiot", "Elif Batuman","9781594205613", 1, 1, 0, copies, reservations));
+        booksRepository.save(new BooksEntity("The Idiot", "Fyodor Dostoyevsky","9780226159621", 1, 1, 0, copies, reservations));
+        booksRepository.save(new BooksEntity("Normal People", "Sally Rooney","9781984822178", 1, 1, 0, copies, reservations));
+
+
+        //Act
+       List<BooksEntity> allBooks = booksService.getBook(null, null);
+
+        // Assert
+        verify(booksRepository, times(1)).findAll();
+        assertEquals(0, allBooks.size());
+    }
 
     private BooksEntity constructBooksEntity() {
         List<CopiesOfBooksEntity> copies = new ArrayList<>();

@@ -123,24 +123,6 @@ class BookReservationServiceTest {
     }
 
 
-//    //new
-//    @Test
-//    public void givenBookToUpdateCardNumberAndReservedBook_whenStepsToPutBookAsideThatIsAvailable_ThenWorks() {
-//        //Arrange
-//        BooksEntity bookToUpdate = constructBooksEntity();
-//        BooksBorrowed borrowedBook = constructBorrowedBook();
-//        ReservedBooksEntity reservedBook = constructReservedBooks();
-//        bookToUpdate.getReservations().add(constructReservedBooks());
-//        given(booksRepository.findById(anyString())).willReturn(Optional.of(bookToUpdate));
-//
-//        //Act
-//        bookReservationService.stepsToPutBookAsideThatIsAvailable(bookToUpdate, "SMITJON19500401", reservedBook);
-//
-//        //Assert
-//
-//
-//        verify(booksRepository, times(2)).findById("9781984822178");
-//    }
 
     @Test
     public void givenId_whenStepForDeletingReservation_ThenWorks() {

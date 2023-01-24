@@ -16,7 +16,9 @@ import java.util.stream.Collectors;
 public class CopiesOfBooksService {
 
     private final CopiesOfBooksRepository copiesOfBooksRepository;
-
+    static final String STATUS_AVAILABLE = "AVAILABLE";
+    static final String STATUS_ON_HOLD = "ON HOLD FOR PICK UP";
+    static final String STATUS_ON_LOAN = "ON LOAN";
 
 
     CopiesOfBooksService(CopiesOfBooksRepository copiesOfBooksRepository) {
@@ -29,7 +31,7 @@ public class CopiesOfBooksService {
         CopiesOfBooksEntity copyToUpdate = copiesOfBooksRepository.findById(barcode)
                 .orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
         copyToUpdate.setDueDate(LocalDate.now().plusWeeks(3));
-        copyToUpdate.setStatus("ON LOAN");
+        copyToUpdate.setStatus(STATUS_ON_LOAN);
     }
 
 
@@ -37,13 +39,13 @@ public class CopiesOfBooksService {
         CopiesOfBooksEntity copyToUpdate = copiesOfBooksRepository.findById(barcode)
                 .orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
         copyToUpdate.setDueDate(null);
-        copyToUpdate.setStatus("AVAILABLE");
+        copyToUpdate.setStatus(STATUS_AVAILABLE);
     }
 
     public void updateCopyAvailableForPickUp(String barcode) {
         CopiesOfBooksEntity copyToUpdate = copiesOfBooksRepository.findById(barcode).get();
         copyToUpdate.setDueDate(null);
-        copyToUpdate.setStatus("ON HOLD FOR PICK UP");
+        copyToUpdate.setStatus(STATUS_ON_HOLD);
     }
 
     public void verifyCopyIsAvailableForLoan(BooksBorrowed booksBorrowed, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository) {
@@ -53,7 +55,7 @@ public class CopiesOfBooksService {
                 .filter(copy -> copy.getIdMember().equals(booksBorrowed.getIdMember()))
                 .collect(Collectors.toList());
         CopiesOfBooksEntity copyOfBook = copiesOfBooksRepository.findById(booksBorrowed.getIdBook()).get();
-        if (!copyOfBook.getStatus().equals("AVAILABLE") && reservation.size() < 1) {
+        if (!copyOfBook.getStatus().equals(STATUS_AVAILABLE) && reservation.size() < 1) {
             throw new RuntimeException("Copy is unavailable to borrow. Please make a reservation");
         } else if (reservation.size() >= 1) {
             reservationsAvailableForPickUpRepository.deleteById(reservation.get(0).getId());

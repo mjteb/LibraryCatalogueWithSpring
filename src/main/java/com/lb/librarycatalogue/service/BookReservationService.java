@@ -27,7 +27,7 @@ public class BookReservationService {
     private final ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository;
     private final CopiesOfBooksService copiesOfBooksService;
     private final ReservationsAvailableForPickUpService reservationsAvailableForPickUpService;
-
+    static final String STATUS_AVAILABLE = "AVAILABLE";
 
     BookReservationService(BookReservationRepository bookReservationRepository, BooksRepository booksRepository, LibraryMemberRepository libraryMemberRepository, ReservationsAvailableForPickUpRepository reservationsAvailableForPickUpRepository, CopiesOfBooksService copiesOfBooksService, ReservationsAvailableForPickUpService reservationsAvailableForPickUpService) {
         this.bookReservationRepository = bookReservationRepository;
@@ -55,7 +55,7 @@ public class BookReservationService {
 
     public void stepsToPutBookAsideThatIsAvailable(BooksEntity bookToUpdate, String cardNumber, ReservedBooksEntity reservedBooksEntity) {
         List<String> barcodeOfAvailableCopies = bookToUpdate.getCopiesOfBooks().stream()
-                .filter(copy -> copy.getStatus().equals("AVAILABLE"))
+                .filter(copy -> copy.getStatus().equals(STATUS_AVAILABLE))
                 .map(CopiesOfBooksEntity::getBarcode)
                 .collect(Collectors.toList());
         String barcode = barcodeOfAvailableCopies.get(0);
