@@ -103,15 +103,9 @@ class BooksServiceTest {
     @Test
     public void givenNothing_whenGetBook_thenReturnsAllBooks() {
         //Arrange
-        List<CopiesOfBooksEntity> copies = new ArrayList<>();
-        List<ReservedBooksEntity> reservations = new ArrayList<>();
-        booksRepository.save(new BooksEntity("The Idiot", "Elif Batuman","9781594205613", 1, 1, 0, copies, reservations));
-        booksRepository.save(new BooksEntity("The Idiot", "Fyodor Dostoyevsky","9780226159621", 1, 1, 0, copies, reservations));
-        booksRepository.save(new BooksEntity("Normal People", "Sally Rooney","9781984822178", 1, 1, 0, copies, reservations));
-
 
         //Act
-       List<BooksEntity> allBooks = booksService.getBook(null, null);
+       List<BooksEntity> allBooks = booksService.getBook(null, null, null);
 
         // Assert
         verify(booksRepository, times(1)).findAll();

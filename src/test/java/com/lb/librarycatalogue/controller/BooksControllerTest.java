@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
@@ -91,6 +92,43 @@ class BooksControllerTest {
                 .content(objectMapper.writeValueAsString(booksDto)));
 
         response.andExpect(status().isNoContent());
+    }
+
+//    @Test
+//    public void givenCardNumber_whenGetLibraryMember_thenMemberReturned() throws Exception {
+//        when(libraryMemberService.getLibraryMember("SMITKAY19500401")).thenReturn(libraryMemberEntity);
+//        when(libraryMemberMapper.mapLibraryMemberEntityToDto(libraryMemberEntity)).thenReturn(libraryMemberDto);
+//
+//        ResultActions response = mockMvc.perform(get("/librarymembermanagement/librarymember")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(libraryMemberDto))
+//                .param("cardNumber", "SMITKAY19500401"));
+//
+//        response.andExpect(status().isOk())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(libraryMemberDto.getFirstName())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(libraryMemberDto.getLastName())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber", CoreMatchers.is(libraryMemberDto.getPhoneNumber())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.cardNumber", CoreMatchers.is(libraryMemberDto.getCardNumber())));
+//
+//    }
+
+    @Test
+    public void givenIsbn_whenGetBook_thenBookReturned() throws Exception {
+        String isbn = "9781984822178";
+        List<BooksDto> booksDtoReturned = List.of(booksDto);
+        List<BooksEntity> booksEntitiesReturned = List.of(booksEntity);
+        when(booksService.getBook(null, null, isbn)).thenReturn(booksEntitiesReturned);
+        when(booksMapper.mapBooksEntityToDtoList(booksEntitiesReturned)).thenReturn(booksDtoReturned);
+
+        ResultActions response = mockMvc.perform(get("/bookmanagementsystemforbooks/getbook")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(booksDtoReturned))
+                .param("isbn", isbn));
+
+        response.andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(booksDtoReturned.size())));
+
     }
 
 

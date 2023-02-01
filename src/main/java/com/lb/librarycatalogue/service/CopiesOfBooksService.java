@@ -1,8 +1,10 @@
 package com.lb.librarycatalogue.service;
 
 import com.lb.librarycatalogue.entity.BooksBorrowed;
+import com.lb.librarycatalogue.entity.BooksEntity;
 import com.lb.librarycatalogue.entity.CopiesOfBooksEntity;
 import com.lb.librarycatalogue.entity.ReservationsAvailableToBorrowEntity;
+import com.lb.librarycatalogue.repository.BooksRepository;
 import com.lb.librarycatalogue.repository.CopiesOfBooksRepository;
 import com.lb.librarycatalogue.repository.ReservationsAvailableForPickUpRepository;
 import org.springframework.stereotype.Service;
@@ -16,14 +18,16 @@ import java.util.stream.Collectors;
 public class CopiesOfBooksService {
 
     private final CopiesOfBooksRepository copiesOfBooksRepository;
+    private final BooksRepository booksRepository;
     static final String STATUS_AVAILABLE = "AVAILABLE";
     static final String STATUS_ON_HOLD = "ON HOLD FOR PICK UP";
     static final String STATUS_ON_LOAN = "ON LOAN";
 
 
-    CopiesOfBooksService(CopiesOfBooksRepository copiesOfBooksRepository) {
+    CopiesOfBooksService(CopiesOfBooksRepository copiesOfBooksRepository, BooksRepository booksRepository) {
         this.copiesOfBooksRepository = copiesOfBooksRepository;
 
+        this.booksRepository = booksRepository;
     }
 
 
@@ -67,6 +71,12 @@ public class CopiesOfBooksService {
         CopiesOfBooksEntity copy = copiesOfBooksRepository.findById(barcode)
                 .orElseThrow(() -> new RuntimeException("An invalid barcode was entered"));
         copiesOfBooksRepository.delete(copy);
+    }
+
+    public void addCopy(CopiesOfBooksEntity copyOfBooksEntity) {
+        BooksEntity booksEntity = booksRepository.findById(copyOfBooksEntity.getIsbnOfTitle())
+                        .orElseThrow(() -> new RuntimeException("No book is associated with this copy"));
+            copiesOfBooksRepository.save(copyOfBooksEntity);
     }
 }
 

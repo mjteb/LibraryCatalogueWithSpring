@@ -18,6 +18,6 @@ public interface BooksMapper {
     @InheritInverseConfiguration
     BooksDto mapBooksEntityToDto(BooksEntity booksEntity);
 
-    List<BooksDto> mapBooksEntityToDto(List<BooksEntity> booksEntity);
+    List<BooksDto> mapBooksEntityToDtoList(List<BooksEntity> booksEntity);
 
 }

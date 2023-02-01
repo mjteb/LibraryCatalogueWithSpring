@@ -46,7 +46,7 @@ public class BooksService {
         booksRepository.deleteById(isbn);
     }
 
-    public List<BooksEntity> getBook(String title, String author) {
+    public List<BooksEntity> getBook(String title, String author, String isbn) {
         if (title != null && author != null) {
             return booksRepository.findAll(where(BookSpecifications.likeAuthor(author))
                     .and(BookSpecifications.likeTitle(title)));
@@ -56,6 +56,9 @@ public class BooksService {
         }
         if (title != null) {
             return booksRepository.findAll(where(BookSpecifications.likeTitle(title)));
+        }
+        if (isbn != null) {
+            return booksRepository.findAll(where(BookSpecifications.equalIsbn(isbn)));
         }
         return booksRepository.findAll();
     }

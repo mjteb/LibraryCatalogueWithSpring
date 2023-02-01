@@ -35,9 +35,10 @@ public class BooksController {
     @GetMapping(value = "/getbook")
     ResponseEntity<List<BooksDto>> getBook(
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) String author
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String isbn
     ) {
-        return ResponseEntity.ok(booksMapper.mapBooksEntityToDto(booksService.getBook(title, author)));
+        return ResponseEntity.ok(booksMapper.mapBooksEntityToDtoList(booksService.getBook(title, author, isbn)));
 
     }
 
